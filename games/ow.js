@@ -13,6 +13,6 @@ $(document).ready(function() {
      $('.ow-qp-played').append(data.quickPlayStats.games.played);
      $('.ow-qp-won').append(data.quickPlayStats.games.won);
      $('.ow-rating').append(data.rating);
-     $('.ow-level').append(data.prestige + data.level);
+     $('.ow-level').append(data.prestige +""+ data.level);
   });
 });
