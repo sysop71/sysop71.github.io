@@ -4,5 +4,6 @@ $(document).ready(function() {
   }).then(function(data) {
      $('.ow-name').append(data.name);
      $('.ow-icon').append("<img src=" + data.icon + " />");
+     $('.ow-levelIcon').append("<img src=" + data.levelIcon + " />");
   });
 });
