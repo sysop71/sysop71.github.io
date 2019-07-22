@@ -1,4 +1,4 @@
-$().ready(function() {
+$(document).ready(function() {
   $.ajax({
       url: "https://ow-api.com/v1/stats/xbl/sysop71/profile"
   }).then(function(data) {
