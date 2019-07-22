@@ -1,4 +1,3 @@
-var d = new Date();
 $(document).ready(function() {
   $.ajax({
       url: "https://ow-api.com/v1/stats/xbl/sysop71/profile"
@@ -15,6 +14,6 @@ $(document).ready(function() {
      $('.ow-qp-won').append(data.quickPlayStats.games.won);
      $('.ow-rating').append(data.rating);
      $('.ow-level').append(data.prestige +""+ data.level);
-     $('.api-get-date').append(d.toUTCString());
+     $('.api-get-date').append(Date().toUTCString());
   });
 });
