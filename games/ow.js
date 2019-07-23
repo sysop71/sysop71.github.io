@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  var currentdate = new Date(); 
+  var currentdate = Date($.now()); 
     var datetime = currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
                 + currentdate.getFullYear() + " @ "  
@@ -21,6 +21,6 @@ $(document).ready(function() {
      $('.ow-qp-won').append(data.quickPlayStats.games.won);
      $('.ow-rating').append(data.rating);
      $('.ow-level').append(data.prestige +""+ data.level);
-     $('.api-get-date').append(datetime);
+     $('.api-get-date').append(currentdate);
   });
 });
