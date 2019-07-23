@@ -1,4 +1,11 @@
 $(document).ready(function() {
+  var currentdate = new Date(); 
+    var datetime = currentdate.getDate() + "/"
+                + (currentdate.getMonth()+1)  + "/" 
+                + currentdate.getFullYear() + " @ "  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
   $.ajax({
       url: "https://ow-api.com/v1/stats/xbl/sysop71/profile"
   }).then(function(data) {
@@ -14,6 +21,6 @@ $(document).ready(function() {
      $('.ow-qp-won').append(data.quickPlayStats.games.won);
      $('.ow-rating').append(data.rating);
      $('.ow-level').append(data.prestige +""+ data.level);
-     $('.api-get-date').append(Date().toUTCString());
+     $('.api-get-date').append(datetime);
   });
 });
