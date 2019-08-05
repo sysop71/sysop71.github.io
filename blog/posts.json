@@ -5,11 +5,12 @@
       "date": "2019-08-05",
       "title": "This is a test",
       "subtitle": "this is only a test",
-      "body": 
-      [
-        "if this had been an actual blog post, there would have been useful and insightful information.",
-        "please check back later when there is something actually to see.s"
-      ]
+      "body": {
+        "lines": [
+          "if this had been an actual blog post, there would have been useful and insightful information.",
+          "please check back later when there is something actually to see.s"
+        ]
+      }
     }
   ]
 }
