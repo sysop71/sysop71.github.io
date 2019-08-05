@@ -1,0 +1,57 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "posts"
+  ],
+  "properties": {
+    "posts": {
+      "$id": "#/properties/posts",
+      "type": "array",
+      "title": "The Posts Schema",
+      "items": {
+        "$id": "#/properties/posts/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "date",
+          "title",
+          "subtitle",
+          "body"
+        ],
+        "properties": {
+          "date": {
+            "$id": "#/properties/posts/items/properties/date",
+            "type": "string",
+            "title": "The Date Schema",
+            "default": "",
+            "pattern": "^(.*)$"
+          },
+          "title": {
+            "$id": "#/properties/posts/items/properties/title",
+            "type": "string",
+            "title": "The Title Schema",
+            "default": "",
+            "pattern": "^(.*)$"
+          },
+          "subtitle": {
+            "$id": "#/properties/posts/items/properties/subtitle",
+            "type": "string",
+            "title": "The Subtitle Schema",
+            "default": "",
+            "pattern": "^(.*)$"
+          },
+          "body": {
+            "$id": "#/properties/posts/items/properties/body",
+            "type": "string",
+            "title": "The Body Schema",
+            "default": "",
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
+}
