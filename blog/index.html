@@ -9,6 +9,21 @@
   <title>Sysop71</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
   <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+  <script>
+    $(function () {
+
+      var url = "https://jsonplaceholder.typicode.com/posts";
+
+      $.getJSON(url, function (posts) {
+        $.each(posts, function (i, post) {
+          $('.content').append($('<p />', { 'class': 'title' }).text(post.title));
+          $('.content').append($('<p />', { 'class': 'subtitle' }).text(post.title));
+          $('.content').append($('<p />').text(post.body));
+        });
+      });
+
+    });</script>
 </head>
 
 <body>
@@ -26,13 +41,6 @@
         <div class="tile">
           <article class="tile is-child">
             <div class="content">
-              <p class="title has-text-grey-dark">Streaming Ideas</p>
-              <p class="subtitle has-text-grey">2019-07-26</p>
-              <p>I've been thinking about doing some regular streaming, escpecially now that school is getting ready to
-                start back up. I've not decided if I want to do this on Twitch, or on YouTube, I'm leaning towards
-                YouTube for specific topics, and then Twitch for just kind of grinding through things. Most likely do
-                Minecraft on YouTube predominantly, as Overwatch on YouTube seems a little weird to me, but perhaps some
-                clips or highights might be fun as well.</p>
             </div>
           </article>
         </div>
