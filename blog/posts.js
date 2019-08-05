@@ -1,4 +1,4 @@
-var url = "posts.json";
+var url = "https://sysop71.com/blog/posts.json";
 
 $.getJSON(url, function (posts) {
   $.each(posts, function (i, post) {
