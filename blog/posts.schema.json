@@ -3,6 +3,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "$id": "http://example.com/root.json",
   "type": "object",
+  "title": "The Root Schema",
   "required": [
     "posts"
   ],
@@ -45,10 +46,25 @@
           },
           "body": {
             "$id": "#/properties/posts/items/properties/body",
-            "type": "string",
+            "type": "object",
             "title": "The Body Schema",
-            "default": "",
-            "pattern": "^(.*)$"
+            "required": [
+              "lines"
+            ],
+            "properties": {
+              "lines": {
+                "$id": "#/properties/posts/items/properties/body/properties/lines",
+                "type": "array",
+                "title": "The Lines Schema",
+                "items": {
+                  "$id": "#/properties/posts/items/properties/body/properties/lines/items",
+                  "type": "string",
+                  "title": "The Items Schema",
+                  "default": "",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
           }
         }
       }
