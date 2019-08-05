@@ -1,16 +1,11 @@
 {
+  "$schema": "https://sysop71.com/blog/posts.schema.json",
   "posts": [
     {
-      "date": "2019-08-04",
-      "title": "Current Games Played",
-      "subtitle": "Overwatch",
-      "body": "I play this game on the Xbox, the PC and my Playstation 4. By far I have the most time on the Xbox, where I think I've clocked nearly 20 days of playtime. I really enjoy the team aspect of it, a lot more than Apex or Fortnight, which I still can't wrap my brain around. Also a very big fan of playing competitive matches, I feel I'm pretty good, but always working on getting better. I wrote a little wrapper for an overwatch api that will display some basic stats below, this is just on my xbox account."
-    },
-    {
       "date": "2019-08-05",
-      "title": "Current Games Played",
-      "subtitle": "Overwatch",
-      "body": "I play this game on the Xbox, the PC and my Playstation 4. By far I have the most time on the Xbox, where I think I've clocked nearly 20 days of playtime. I really enjoy the team aspect of it, a lot more than Apex or Fortnight, which I still can't wrap my brain around. Also a very big fan of playing competitive matches, I feel I'm pretty good, but always working on getting better. I wrote a little wrapper for an overwatch api that will display some basic stats below, this is just on my xbox account."
+      "title": "This is a test",
+      "subtitle": "this is only a test",
+      "body": "if this had been an actual blog post, there would have been useful and insightful information."
     }
   ]
 }
