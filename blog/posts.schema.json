@@ -28,12 +28,13 @@
             "type": "string",
             "title": "The Date Schema",
             "default": "",
-            "pattern": "^(.*)$"
+            "pattern": "^([0-9]{4})-?(1[0-2]|0[1-9])-?(3[01]|0[1-9]|[12][0-9])$"
           },
           "title": {
             "$id": "#/properties/posts/items/properties/title",
             "type": "string",
             "title": "The Title Schema",
+            "maxLength": 70,
             "default": "",
             "pattern": "^(.*)$"
           },
@@ -41,6 +42,7 @@
             "$id": "#/properties/posts/items/properties/subtitle",
             "type": "string",
             "title": "The Subtitle Schema",
+            "maxLength": 30,
             "default": "",
             "pattern": "^(.*)$"
           },
