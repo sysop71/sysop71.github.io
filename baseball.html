@@ -1,0 +1,35 @@
+<html>
+
+  <head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+
+    <script>
+      $(function() {
+        var url = "https://gist.githubusercontent.com/jeffpatton1971/bc76d4203f7aa618ec101fd10a32bb5a/raw/2523b5e640a89f21a323fc87a98594a76dc06420/data.json";
+
+        $.getJSON(url, function(jobject) {
+          $.each(jobject.data.game, function(i, data) {
+            $('.post-content').append($('<p />', {}).text(data.id));
+
+          });
+        });
+      });
+
+    </script>
+  </head>
+
+  <body>
+    <div class='navbar'>
+
+    </div>
+    <div class="tile">
+      <article class="tile is-child">
+        <div class="post-content">
+
+        </div>
+      </article>
+    </div>
+
+  </body>
+
+</html>
