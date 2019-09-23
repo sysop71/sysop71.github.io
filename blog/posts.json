@@ -2,13 +2,56 @@
   "$schema": "https://sysop71.com/blog/posts.schema.json",
   "posts": [
     {
-      "date": "2019-08-05",
-      "title": "This is a test",
-      "subtitle": "this is only a test",
+      "date": "2019-09-16",
+      "title": "A Whole New World - Season 1, Episode 1",
+      "subtitle": "Premier Episode",
       "body": {
         "lines": [
-          "if this had been an actual blog post, there would have been useful and insightful information.",
-          "please check back later when there is something actually to see.s"
+          "Welcome to the premier episode of my Survival World series. I really have two goals with this, the first is sorting",
+          "out a workflow for me and Youtube, the second is to share how I work inside of a Minecraft world, and perhaps you and",
+          "I both will learn a few things along the way.",
+          "",
+          "In this first episode it's really about basic survival the first few nights, we need to find food, sort out shelter and",
+          "perhaps water, not as big a survival deal in Minecraft as it is in the real world. Once we have those basics down we will",
+          "progress to more complex things. I do have a rough idea of how I would like the first few episodes to go, so I'll drop ",
+          "those here for you:",
+          "",
+          "Episode 1 - Survive the night",
+          "Episode 2 - Scouting for base",
+          "Episode 3 - Base building",
+          "Episode 4 - First farm",
+          "Episode 5 - Mining",
+          "Episode 6 - AFK fish farm",
+          "Episode 7 - Storage",
+          "Episode 8 - Enchanting",
+          "",
+          "I will strive to stay close to that and once we get further in I will update this list.",
+          "Thanks for reading and thanks for watching!"
+        ]
+      }
+    },
+    {
+      "date": "2019-09-19",
+      "title": "A Whole New World - Season 1, Episode 2",
+      "subtitle": "Building the Base",
+      "body": {
+        "lines": [
+          "Well, this was originally supposed to be Episode 3, but I really liked the view from our spawn location, so decided to just",
+          "build up the base right where we started. The plans for the build are based on stuff I've watched on other channels, and kind",
+          "of my own personal bent. But I have a flatworld that I rough out my builds on, so I can get an idea of what resources I need",
+          "and a rough idea of what it looks like. Between episodes I will stream resource gathering and general exploration, this will",
+          "be a live stream and hopefully should show on the channel, but first one didn't. These streams will vary but should be at",
+          "least an hour long, and won't be too terribly exciting.",
+          "",
+          "In this episode I terraform the top of my little mountain and create a platform, upon this platform I will create a little",
+          "base that should be mostly spawn proof, as I am using mostly slabs and really trying to light it all up very well. You may notice",
+          "some cuts and as well as some sections that are sped up as they are rather tedious. This episode took a couple days to do as I",
+          "ran into some computer issues and was experiencing some really bad performance while playing.",
+          "",
+          "In an effort to attempt to stay on track, the next episode will probably cover making a few adjustments and additions to the base",
+          "so when we get to the farming episode I can be dedicated to that.",
+          "",
+          "Thanks for reading, and thanks for watching!"
         ]
       }
     }
