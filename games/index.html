@@ -1,119 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Hello Bulma!</title>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+
+<body>
+ <section class="hero is-primary is-medium">
+  <!-- Hero head: will stick at the top -->
+  <div class="hero-head">
+   <nav class="navbar">
+    <div class="container">
+     <div class="navbar-brand">
+      <a class="navbar-item">
+       <img src="https://bulma.io/images/bulma-type-white.png" alt="Logo">
+      </a>
+      <span class="navbar-burger" data-target="navbarMenuHeroA">
+       <span></span>
+       <span></span>
+       <span></span>
+      </span>
+     </div>
+     <div id="navbarMenuHeroA" class="navbar-menu">
+      <div class="navbar-end">
+       <a class="navbar-item is-active">
+        Home
+       </a>
+       <a class="navbar-item">
+        Games
+       </a>
+       <a class="navbar-item">
+        Schedule
+       </a>
+       <a href="about/" class="navbar-item">
+        About
+       </a>
+      </div>
+     </div>
+    </div>
+   </nav>
+  </div>
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body">
+   <div class="container has-text-centered">
+    <p class="title">
+     Sysop71 Gaming
+    </p>
+    <p class="subtitle">
+     Subtitle
+    </p>
+   </div>
+   <div class="tile is-ancestor">
+    <div class="tile is-horizontal is-12">
+     <div class="tile">
+      <article class="tile is-child">
+       <div class="content">
+        <p class="title">Current Games Played</p>
+        <p class="subtitle">Overwatch</p>
+        <p>I play this game on the Xbox, the PC and my Playstation 4. By far I have the most time on the Xbox,
+         where I think I've clocked nearly 20 days of playtime. I really enjoy the team aspect of it, a lot more
+         than Apex or Fortnight, which I still can't wrap my brain around. Also a very big fan of playing
+         competitive matches, I feel I'm pretty good, but always working on getting better. I wrote a little
+         wrapper for an overwatch api that will display some basic stats below, this is just on my xbox account.
+        </p>
+        <p class="subtitle">Minecraft</p>
+        <p>I play this game on the Xbox, the PC and my iPhone, and I'm really looking forward to the Minecraft
+         Earth game. A lot of my more creative work is done on the Java edition, most likely because it's more
+         personal, whereas the bedrock edition on Windows and Xbox I tend to play with my son. I currently run
+         some minecraft servers, and I may be inclined to share that information here at some point in the
+         future. I'd also like to display achievements and stuff here, but I need to wrap my brain around the
+         Xbox API, the docs are kind of all over the place with no really good examples for jQuery, and I don't
+         feel like writing C# for something simple.</p>
+       </div>
+      </article>
+     </div>
+    </div>
+   </div>
+  </div>
+  <!-- Hero footer: will stick at the bottom -->
+  <div class="hero-foot">
+   <nav class="tabs">
+    <div class="container">
+     <ul>
+      <li><a href="https://www.tiktok.com/@sysop71">TikTok</a></li>
+      <li><a href="https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg">YouTube Channel</a></li>
+      <li><a href="https://www.twitch.tv/sysop71ow">Overwatch Streaming</a></li>
+      <li><a href="https://www.twitch.tv/sysop71">Minecraft Streaming</a></li>
+      <li><a href="https://www.instagram.com/sysop71/">Instagram</a></li>
+     </ul>
+    </div>
+   </nav>
+  </div>
+ </section>
+ <footer class="footer">
+  <div class="content has-text-centered">
+   <p>
+    <a href="https://bulma.io/"><img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128"
+      height="24"></a>
+    <a href="https://code.visualstudio.com/"><img
+      src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="Written in vsCode"
+      width="30" height="30"></a>
+    <a href="https://pages.github.com/"><img
+      src="https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png" alt="Hosted on GitHub" width="84"
+      height="30"></a>
+   </p>
+  </div>
+ </footer>
+</body>
+
+</html>
+
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sysop71</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="ow.js"></script>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Sysop71</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+ <script src="ow.js"></script>
 </head>
 
 <body>
-  <section class="section has-background-dark has-text-grey-lighter">
-    <div class="tabs is-left">
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li class="is-active"><a href="/games">Games</a></li>
-        <li><a href="/online">Online</a></li>
-        <li><a href="/blog">Blog</a></li>
-      </ul>
-    </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-horizontal is-12">
-        <div class="tile">
-          <article class="tile is-child">
-            <div class="content">
-              <p class="title has-text-grey-dark">Current Games Played</p>
-              <p class="subtitle has-text-grey">Overwatch</p>
-              <p>I play this game on the Xbox, the PC and my Playstation 4. By far I have the most time on the Xbox,
-                where I think I've clocked nearly 20 days of playtime. I really enjoy the team aspect of it, a lot more
-                than Apex or Fortnight, which I still can't wrap my brain around. Also a very big fan of playing
-                competitive matches, I feel I'm pretty good, but always working on getting better. I wrote a little
-                wrapper for an overwatch api that will display some basic stats below, this is just on my xbox account.
-              </p>
-              <p class="subtitle has-text-grey">Minecraft</p>
-              <p>I play this game on the Xbox, the PC and my iPhone, and I'm really looking forward to the Minecraft
-                Earth game. A lot of my more creative work is done on the Java edition, most likely because it's more
-                personal, whereas the bedrock edition on Windows and Xbox I tend to play with my son. I currently run
-                some minecraft servers, and I may be inclined to share that information here at some point in the
-                future. I'd also like to display achievements and stuff here, but I need to wrap my brain around the
-                Xbox API, the docs are kind of all over the place with no really good examples for jQuery, and I don't
-                feel like writing C# for something simple.</p>
-            </div>
-          </article>
-        </div>
+ <section class="section has-background-dark has-text-grey-lighter">
+  <div class="tabs is-left">
+   <ul>
+    <li><a href="/">Home</a></li>
+    <li class="is-active"><a href="/games">Games</a></li>
+    <li><a href="/online">Online</a></li>
+    <li><a href="/blog">Blog</a></li>
+   </ul>
+  </div>
+  <div class="tile is-ancestor">
+   <div class="tile is-horizontal is-12">
+    <div class="tile">
+     <article class="tile is-child">
+      <div class="content">
+       <p class="title has-text-grey-dark">Current Games Played</p>
+       <p class="subtitle has-text-grey">Overwatch</p>
+       <p>I play this game on the Xbox, the PC and my Playstation 4. By far I have the most time on the Xbox,
+        where I think I've clocked nearly 20 days of playtime. I really enjoy the team aspect of it, a lot more
+        than Apex or Fortnight, which I still can't wrap my brain around. Also a very big fan of playing
+        competitive matches, I feel I'm pretty good, but always working on getting better. I wrote a little
+        wrapper for an overwatch api that will display some basic stats below, this is just on my xbox account.
+       </p>
+       <p class="subtitle has-text-grey">Minecraft</p>
+       <p>I play this game on the Xbox, the PC and my iPhone, and I'm really looking forward to the Minecraft
+        Earth game. A lot of my more creative work is done on the Java edition, most likely because it's more
+        personal, whereas the bedrock edition on Windows and Xbox I tend to play with my son. I currently run
+        some minecraft servers, and I may be inclined to share that information here at some point in the
+        future. I'd also like to display achievements and stuff here, but I need to wrap my brain around the
+        Xbox API, the docs are kind of all over the place with no really good examples for jQuery, and I don't
+        feel like writing C# for something simple.</p>
       </div>
+     </article>
     </div>
-    <div class="card">
-      <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48 ow-icon">
-            </figure>
-          </div>
-          <div class="media-content">
-            <p class="title is-4">Overwatch</p>
-            <p class="subtitle is-5 ow-name">@</p>
-          </div>
-        </div>
-        <div class="content">
-          <p class="ow-level">Level : </p>
-          <p class="ow-rating">Skill : </p>
-          <table class="table is-hoverable is-narrow">
-            <thead>
-              <tr>
-                <th> </th>
-                <th>Competitive</th>
-                <th>QuickPlay</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>Cards</th>
-                <td class="ow-comp-cards"></td>
-                <td class="ow-qp-cards"></td>
-              </tr>
-              <tr>
-                <th>Medals</th>
-                <td class="ow-comp-medals"></td>
-                <td class="ow-qp-medals"></td>
-              </tr>
-              <tr>
-                <th>Played</th>
-                <td class="ow-comp-played"></td>
-                <td class="ow-qp-played"></td>
-              </tr>
-              <tr>
-                <th>Won</th>
-                <td class="ow-comp-won"></td>
-                <td class="ow-qp-won"></td>
-              </tr>
-            </tbody>
-          </table>
-          <br>
-          <p class="api-get-date is-2">api query time : </p>
-        </div>
-      </div>
+   </div>
+  </div>
+  <div class="card">
+   <div class="card-content">
+    <div class="media">
+     <div class="media-left">
+      <figure class="image is-48x48 ow-icon">
+      </figure>
+     </div>
+     <div class="media-content">
+      <p class="title is-4">Overwatch</p>
+      <p class="subtitle is-5 ow-name">@</p>
+     </div>
     </div>
-  </section>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        <a href="https://bulma.io/"><img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma"
-            width="128" height="24"></a>
-        <a href="https://code.visualstudio.com/"><img
-            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg"
-            alt="Written in vsCode" width="30" height="30"></a>
-        <a href="https://pages.github.com/"><img
-            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png" alt="Hosted on GitHub"
-            width="84" height="30"></a>
-      </p>
+    <div class="content">
+     <p class="ow-level">Level : </p>
+     <p class="ow-rating">Skill : </p>
+     <table class="table is-hoverable is-narrow">
+      <thead>
+       <tr>
+        <th> </th>
+        <th>Competitive</th>
+        <th>QuickPlay</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr>
+        <th>Cards</th>
+        <td class="ow-comp-cards"></td>
+        <td class="ow-qp-cards"></td>
+       </tr>
+       <tr>
+        <th>Medals</th>
+        <td class="ow-comp-medals"></td>
+        <td class="ow-qp-medals"></td>
+       </tr>
+       <tr>
+        <th>Played</th>
+        <td class="ow-comp-played"></td>
+        <td class="ow-qp-played"></td>
+       </tr>
+       <tr>
+        <th>Won</th>
+        <td class="ow-comp-won"></td>
+        <td class="ow-qp-won"></td>
+       </tr>
+      </tbody>
+     </table>
+     <br>
+     <p class="api-get-date is-2">api query time : </p>
     </div>
-  </footer>
+   </div>
+  </div>
+ </section>
+ <footer class="footer">
+  <div class="content has-text-centered">
+   <p>
+    <a href="https://bulma.io/"><img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128"
+      height="24"></a>
+    <a href="https://code.visualstudio.com/"><img
+      src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="Written in vsCode"
+      width="30" height="30"></a>
+    <a href="https://pages.github.com/"><img
+      src="https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png" alt="Hosted on GitHub" width="84"
+      height="30"></a>
+   </p>
+  </div>
+ </footer>
 </body>
 
 </html>

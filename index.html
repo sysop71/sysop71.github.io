@@ -2,84 +2,121 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sysop71</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <title>Hello Bulma!</title>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 </head>
 
 <body>
-  <section class="section has-background-dark has-text-grey-lighter">
-    <div class="tabs is-left">
+ <section class="hero is-primary is-medium">
+  <!-- Hero head: will stick at the top -->
+  <div class="hero-head">
+   <nav class="navbar">
+    <div class="container">
+     <div class="navbar-brand">
+      <a class="navbar-item">
+       <img src="https://bulma.io/images/bulma-type-white.png" alt="Logo">
+      </a>
+      <span class="navbar-burger" data-target="navbarMenuHeroA">
+       <span></span>
+       <span></span>
+       <span></span>
+      </span>
+     </div>
+     <div id="navbarMenuHeroA" class="navbar-menu">
+      <div class="navbar-end">
+       <a class="navbar-item is-active">
+        Home
+       </a>
+       <a class="navbar-item">
+        Games
+       </a>
+       <a class="navbar-item">
+        Schedule
+       </a>
+       <a href="about/" class="navbar-item">
+        About
+       </a>
+      </div>
+     </div>
+    </div>
+   </nav>
+  </div>
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body">
+   <div class="container has-text-centered">
+    <p class="title">
+     Sysop71 Gaming
+    </p>
+    <p class="subtitle">
+     Subtitle
+    </p>
+   </div>
+   <div class="tile is-ancestor">
+    <div class="tile is-vertical is-10">
+     <div class="tile">
+      <div class="tile is-parent is-vertical">
+       <article class="tile is-child">
+        <div class="content">
+         <p class="title">About Me</p>
+         <p class="subtitle">Early Gaming</p>
+         <p>Originally this was like a autobiographical thing, then I realized nobody cares about that! I started
+          gaming A LONG TIME AGO, but in this galaxy. First experience was with a friends Atari 2600 around
+          1981, and it was fun. But for me, I was all about the arcades, Pac-Man, Galaga and the like then there
+          was Dragon's Lair and Mach 3 which were so much fun.</p>
+         <p class="subtitle">Computer Gaming</p>
+         <p>For Christmas in 1984 my uncle bought me a Commodore 64, and I was all about those early computer
+          games. My first was Zork, but I have a whole stack of games from back then, so many hours wasted, so
+          much fun had. Then I got into programming the thing, so I was reading Compute's Gazette, and another
+          mag that I can't remember, learning to write programs, and hand typing in the bytecode for several
+          others.</p>
+         <p class="subtitle">PC/Console Gaming</p>
+         <p>The first computer I had that was able to play video games, akin to what is played today, was a
+          Zenith Z-star 486. I upgraded it from 2mb to 4mb's of RAM, this allowed me DOOM. This was/is my
+          favorite game franchise by far, more time has been spent being ripped to shreds in that game, than
+          anything else. I also played Duke Nukem, but it was a platform game at the time, and Wolfenstein which
+          felt like a Doom knock-off to me.</p>
+         <p>My first console was the Sony Playstaion, and spent a lot of time playing Crash Bandicoot. Then
+          picked up a Wii because my daughter wanted to play the bowling and tennis games, followed by the Wii-U
+          which was nice but a little disappointing.</p>
+         <p>Currently own 3 Xbox consoles, a 360, an Xbox-One s, and an Xbox-One X. The current game of choice is
+          Overwatch, but Minecraft is a close second, I have a lot of fun building things in Minecraft.</p>
+        </div>
+       </article>
+      </div>
+     </div>
+    </div>
+   </div>
+   <!-- Hero footer: will stick at the bottom -->
+   <div class="hero-foot">
+    <nav class="tabs">
+     <div class="container">
       <ul>
-        <li class="is-active"><a href="/">Home</a></li>
-        <li><a href="/games">Games</a></li>
-        <li><a href="/online">Online</a></li>
-        <li><a href="/blog">Blog</a></li>
+       <li><a href="https://www.tiktok.com/@sysop71">TikTok</a></li>
+       <li><a href="https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg">YouTube Channel</a></li>
+       <li><a href="https://www.twitch.tv/sysop71ow">Overwatch Streaming</a></li>
+       <li><a href="https://www.twitch.tv/sysop71">Minecraft Streaming</a></li>
+       <li><a href="https://www.instagram.com/sysop71/">Instagram</a></li>
       </ul>
-    </div>
-    <div class="tile is-ancestor">
-      <div class="tile is-vertical is-10">
-        <div class="tile">
-          <div class="tile is-parent is-vertical">
-            <article class="tile is-child">
-              <div class="content">
-                <p class="title has-text-grey-dark">About Me</p>
-                <p class="subtitle has-text-grey">Early Gaming</p>
-                <p>Originally this was like a autobiographical thing, then I realized nobody cares about that! I started
-                  gaming A LONG TIME AGO, but in this galaxy. First experience was with a friends Atari 2600 around
-                  1981, and it was fun. But for me, I was all about the arcades, Pac-Man, Galaga and the like then there
-                  was Dragon's Lair and Mach 3 which were so much fun.</p>
-                <p class="subtitle has-text-grey">Computer Gaming</p>
-                <p>For Christmas in 1984 my uncle bought me a Commodore 64, and I was all about those early computer
-                  games. My first was Zork, but I have a whole stack of games from back then, so many hours wasted, so
-                  much fun had. Then I got into programming the thing, so I was reading Compute's Gazette, and another
-                  mag that I can't remember, learning to write programs, and hand typing in the bytecode for several
-                  others.</p>
-                <p class="subtitle has-text-grey">PC/Console Gaming</p>
-                <p>The first computer I had that was able to play video games, akin to what is played today, was a
-                  Zenith Z-star 486. I upgraded it from 2mb to 4mb's of RAM, this allowed me DOOM. This was/is my
-                  favorite game franchise by far, more time has been spent being ripped to shreds in that game, than
-                  anything else. I also played Duke Nukem, but it was a platform game at the time, and Wolfenstein which
-                  felt like a Doom knock-off to me.</p>
-                <p>My first console was the Sony Playstaion, and spent a lot of time playing Crash Bandicoot. Then
-                  picked up a Wii because my daughter wanted to play the bowling and tennis games, followed by the Wii-U
-                  which was nice but a little disappointing.</p>
-                <p>Currently own 3 Xbox consoles, a 360, an Xbox-One s, and an Xbox-One X. The current game of choice is
-                  Overwatch, but Minecraft is a close second, I have a lot of fun building things in Minecraft.</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-      <div class="tile is-vertical is-2">
-        <div class="tile">
-          <div class="tile is-parent is-horizontal">
-            <article class="tile is-child">
-              <div class="content">
-                <p class="title has-text-grey-dark">Something</p>
-                <p class="subtitle has-text-grey">Random Event</p>
-              </div>
-            </article>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>
-        <a href="https://bulma.io/"><img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma"
-            width="128" height="24"></a>
-        <a href="https://code.visualstudio.com/"><img
-            src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg"
-            alt="Written in vsCode" width="30" height="30"></a>
-        <a href="https://pages.github.com/"><img
-            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png" alt="Hosted on GitHub"
-            width="84" height="30"></a>
-      </p>
-    </div>
-  </footer>
+     </div>
+    </nav>
+   </div>
+ </section>
+ <footer class="footer">
+  <div class="content has-text-centered">
+   <p>
+    <a href="https://bulma.io/"><img src="https://bulma.io/images/made-with-bulma.png" alt="Made with Bulma" width="128"
+      height="24"></a>
+    <a href="https://code.visualstudio.com/"><img
+      src="https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg" alt="Written in vsCode"
+      width="30" height="30"></a>
+    <a href="https://pages.github.com/"><img
+      src="https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png" alt="Hosted on GitHub" width="84"
+      height="30"></a>
+   </p>
+  </div>
+ </footer>
 </body>
 
 </html>
