@@ -30,7 +30,6 @@ paginate_path: /posts/page:num
 
 header_pages:
  - posts.md
- - games.md
  - tournaments.md
  - schedule.md
  - about.md

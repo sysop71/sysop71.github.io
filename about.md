@@ -4,18 +4,14 @@ title: About
 permalink: /about/
 ---
 
-## Early Gaming
-
-Originally this was like a autobiographical thing, then I realized nobody cares about that! I started gaming A LONG TIME AGO, but in this galaxy. First experience was with a friends Atari 2600 around 1981, and it was fun. But for me, I was all about the arcades, Pac-Man, Galaga and the like then there was Dragon's Lair and Mach 3 which were so much fun.
-
-## Computer Gaming
-
-For Christmas in 1984 my uncle bought me a Commodore 64, and I was all about those early computer games. My first was Zork, but I have a whole stack of games from back then, so many hours wasted, so much fun had. Then I got into programming the thing, so I was reading Compute's Gazette, and another mag that I can't remember, learning to write programs, and hand typing in the bytecode for several others.
-
 ## PC/Console Gaming
 
-The first computer I had that was able to play video games, akin to what is played today, was a Zenith Z-star 486. I upgraded it from 2mb to 4mb's of RAM, this allowed me DOOM. This was/is my favorite game franchise by far, more time has been spent being ripped to shreds in that game, than anything else. I also played Duke Nukem, but it was a platform game at the time, and Wolfenstein which felt like a Doom knock-off to me.
+### Overwatch2
 
-My first console was the Sony Playstaion, and spent a lot of time playing Crash Bandicoot. Then picked up a Wii because my daughter wanted to play the bowling and tennis games, followed by the Wii-U which was nice but a little disappointing.
+I main tank on this game, my top three are Reinhard, Orissa and D'Va. I will run Reinhardt when a big shield is required, but I will swap off to D'Va or Orissa depending on the opposing tank pick. I will swap to D'Va if there is a Bastion, Ramattra, Hazard or Mauga on the opposing team. Lately I have started swapping to Zarya when the opposing team runs Orissa, but I will often switch to D'Va for her. Finally I will swap to Winston if the opposing team runs Symmettra.
 
-Currently own 3 Xbox consoles, a 360, an Xbox-One s, and an Xbox-One X. The current game of choice is Overwatch, but Minecraft is a close second, I have a lot of fun building things in Minecraft.
+There are edge cases where I may run Mauga or Rammattra, this typically depends on what I am experiencing within my own team composition. Those choices are almost always looking at the amount of damage and if we feel as a team it makes sense.
+
+Tanks I don't play because I struggle with their physics are Hammond and Sigma. These tanks I have struggled with since they were released and I don't get the same output on those I do with my traditional picks.
+
+Tanks I just won't play are Doom, Roadhog and the newly released Hazard, it's just too easy to counter each of these.
