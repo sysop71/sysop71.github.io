@@ -43,6 +43,7 @@ remote_theme: jekyll/minima
 collections:
   posts:
   tournaments:
+    output: true
 
 minima:
   skin: dark
