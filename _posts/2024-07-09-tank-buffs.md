@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Tanbk Buffs"
+title:  "Tank Buffs"
 date:   2024-07-09 00:00:00 -0600
 categories: blog
 tags: Articles

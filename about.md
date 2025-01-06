@@ -4,8 +4,6 @@ title: About
 permalink: /about/
 ---
 
-# About Me
-
 ## Early Gaming
 
 Originally this was like a autobiographical thing, then I realized nobody cares about that! I started gaming A LONG TIME AGO, but in this galaxy. First experience was with a friends Atari 2600 around 1981, and it was fun. But for me, I was all about the arcades, Pac-Man, Galaga and the like then there was Dragon's Lair and Mach 3 which were so much fun.

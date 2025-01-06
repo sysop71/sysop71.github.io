@@ -4,8 +4,6 @@ title: Schedule
 permalink: /schedule/
 ---
 
-# Schedule
-
 Overwatch2 Casual Tournament schedule for this month.
 
 | Date    | Time |
