@@ -4,7 +4,7 @@ title: Tournaments
 permalink: /tournaments/
 author: Jeff
 ---
-{% for tournament in site.Tournaments %}
+{% for tournament in site.tournaments %}
   {% assign currentdate = tournament.date | date: "%Y" %}
   {% if currentdate != date %}
       {{ currentdate }}

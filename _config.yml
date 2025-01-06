@@ -41,7 +41,6 @@ remote_theme: jekyll/minima
 #theme: minima
 
 collections:
-  posts:
   tournaments:
     output: true
 
