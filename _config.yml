@@ -42,10 +42,10 @@ remote_theme: jekyll/minima
 minima:
   skin: dark
   social_links:
-    - { platform: TikTok,  user_url: "https://www.tiktok.com/@sysop71" }
-    - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
+    # - { platform: TikTok,  user_url: "https://www.tiktok.com/@sysop71" }
+    # - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
     - { platform: Instagram,  user_url: "https://www.instagram.com/sysop71/" }
-    - { platform: Twitch,  user_url: "https://twitch.tv/sysop71" }
+    # - { platform: Twitch,  user_url: "https://twitch.tv/sysop71" }
     - { platform: YouTube,  user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg" }
 
 
