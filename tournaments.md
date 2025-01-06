@@ -4,11 +4,11 @@ title: Tournaments
 permalink: /tournaments/
 author: Jeff
 ---
-{% for post in site.posts %}
-  {% assign currentdate = post.date | date: "%Y" %}
+{% for tournament in site.Tournaments %}
+  {% assign currentdate = tournament.date | date: "%Y" %}
   {% if currentdate != date %}
       {{ currentdate }}
     {% assign date = currentdate %}
   {% endif %}
-  <li><a href="{{ post.url }}">{{ post.title }}</a></li>
+  <li><a href="{{ tournament.url }}">{{ tournament.title }}</a></li>
 {% endfor %}
