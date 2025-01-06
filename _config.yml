@@ -40,6 +40,10 @@ markdown: kramdown
 remote_theme: jekyll/minima
 #theme: minima
 
+collections:
+  posts:
+  tournaments:
+
 minima:
   skin: dark
   social_links:
