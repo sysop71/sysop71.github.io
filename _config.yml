@@ -42,6 +42,10 @@ remote_theme: jekyll/minima
 
 collections:
   tournaments:
+    platform:
+    result:
+    team:
+    sub:
     output: true
 
 minima:
