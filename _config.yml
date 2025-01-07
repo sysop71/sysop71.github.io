@@ -14,12 +14,13 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: sysop71.com
-email: gamer@sysop71.com
 description: >- # this means to ignore newlines until "baseurl:"
   sysop71#1297
 #baseurl: "/pattontech" # the subpath of your site, e.g. /blog
 url: "https://sysop71.com" # the base hostname & protocol for your site, e.g. http://example.com
-author: "sysop71"
+author:
+  name: "sysop71"
+  email: gamer@sysop71.com
 
 google_analytics: G-8CXKYEE42R
 
@@ -50,11 +51,17 @@ collections:
 minima:
   skin: dark
   social_links:
-    - { platform: TikTok,  user_url: "https://www.tiktok.com/@sysop71" }
-    # - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
-    - { platform: instagram,  user_url: "https://www.instagram.com/sysop71/" }
+    - platform: TikTok
+      user_url: "https://www.tiktok.com/@sysop71"
+      title: My TikTok clips
+    - platform: instagram
+      user_url: "https://www.instagram.com/sysop71/"
+      title: My Instagram feed
+    - platform: youtube
+      user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg"
+      title: My YouTube channel
     # - { platform: Twitch,  user_url: "https://twitch.tv/sysop71" }
-    - { platform: youtube,  user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg" }
+    # - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
 
 
 #remote_theme: pages-themes/midnight@v0.2.0
