@@ -1,0 +1,14 @@
+<li>{% assign entry = include.item %}
+    <a {% unless entry.platform == 'rss' %}rel="me" {% endunless %}href="{{ entry.user_url }}" target="_blank" title="{{ entry.title | default: entry.platform }}">
+      {% capture icon_path %}
+        social-icons/{{ entry.platform | downcase }}.svg
+      {% endcapture %}
+      {% if site.includes[icon_path] %}
+        {% include_relative social-icons/{{ entry.platform | downcase }}.svg %}
+      {% else %}
+        <svg class="svg-icon grey">
+          <text x="0" y="15" font-size="10" fill="red">No Icon</text>
+        </svg>
+      {% endif %}
+    </a>
+  </li>
