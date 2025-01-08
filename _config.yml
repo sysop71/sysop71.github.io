@@ -60,7 +60,9 @@ minima:
     - platform: youtube
       user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg"
       title: My YouTube channel
-    # - { platform: Twitch,  user_url: "https://twitch.tv/sysop71" }
+    - platform: Twitch
+      user_url: "https://twitch.tv/sysop71"
+      title: Watch my stream
     # - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
 
 
