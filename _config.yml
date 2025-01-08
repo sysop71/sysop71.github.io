@@ -63,7 +63,8 @@ minima:
     - platform: twitch
       user_url: "https://twitch.tv/sysop71"
       title: Watch my stream
-    # - { platform: Discord,  user_url: "https://discordapp.com/users/sysop71" }
+    - platform: discord
+      user_url: "https://discordapp.com/users/sysop71"
 
 
 #remote_theme: pages-themes/midnight@v0.2.0
