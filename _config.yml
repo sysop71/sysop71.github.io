@@ -51,7 +51,7 @@ collections:
 minima:
   skin: dark
   social_links:
-    - platform: TikTok
+    - platform: tiktok
       user_url: "https://www.tiktok.com/@sysop71"
       title: My TikTok clips
     - platform: instagram
