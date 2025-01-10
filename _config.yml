@@ -66,6 +66,9 @@ minima:
     - platform: youtube
       user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg"
       title: My YouTube channel
+    - platform: bsky
+      user_url: "https://bsky.app/profile/sysop71.bsky.social"
+      title: Come chat with me
 
 
 #remote_theme: pages-themes/midnight@v0.2.0
