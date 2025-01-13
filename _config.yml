@@ -33,6 +33,7 @@ header_pages:
  - posts.md
  - tournaments.md
  - schedule.md
+ - streaming.md
  - about.md
 
 # Build settings
