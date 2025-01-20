@@ -1,0 +1,57 @@
+name: Update Twitch Stream for Overwatch
+
+on:
+  schedule:
+    # Run Tuesday, Wednesday, Thursday from 10:00 PM to midnight CST (UTC-6)
+    - cron: "0 4 * * 2-4"  # 4:00 UTC is 10:00 PM CST
+
+jobs:
+  update-overwatch:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Update Twitch Stream for Overwatch
+        shell: pwsh
+        run: |
+          # Twitch API credentials from repo secrets
+          $ClientId = "${{ secrets.CLIENTID }}"
+          $ClientSecret = "${{ secrets.CLIENTSECRET }}"
+          $BroadcasterId = "${{ vars.BROADCASTERID }}"
+
+          # Get OAuth token
+          $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
+              client_id = $ClientId
+              client_secret = $ClientSecret
+              grant_type = "client_credentials"
+          }
+          $AccessToken = $TokenResponse.access_token
+
+          # Get game ID for Overwatch
+          $GameName = "Overwatch 2"
+          $GameResponse = Invoke-RestMethod -Uri "https://api.twitch.tv/helix/games?name=$GameName" -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+          }
+          $GameId = $GameResponse.data[0].id
+
+          # Update stream info
+          $StreamTitle = "Late-night Overwatch grind! Join the fun."
+          $Tags = @("Overwatch2","OverwatchGameplay","OverwatchFunny","OverwatchPlays","OverwatchTips","OverwatchCommunity","OverwatchMoments","OverwatchLive","OverwatchStreamer","OverwatchHighlights","ReinhardtMain","BlizzardGames","OverwatchCompetitive","FPSGaming","GamingClips","GamerLife","StreamHighlights","GameStreamer","EpicPlays","FunnyMoments","GamingSetup","GamingCommunity","StreamLife","TwitchStreamer")
+
+          $UpdateBody = @{
+              title = $StreamTitle
+              game_id = $GameId
+              broadcaster_id = $BroadcasterId
+              tags = $Tags
+          } | ConvertTo-Json -Depth 10
+
+          Invoke-RestMethod -Uri "https://api.twitch.tv/helix/channels" -Method Patch -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+              "Content-Type" = "application/json"
+          } -Body $UpdateBody
+
+          Write-Host "Overwatch stream information updated successfully!"
