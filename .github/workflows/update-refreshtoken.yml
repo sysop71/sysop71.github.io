@@ -1,79 +1,79 @@
-name: Update Twitch Refresh Token Secret
+name: Update Refresh Token Secret
 
 on:
-  schedule:
-    # This will run once a day at 8:00 AM UTC (you can adjust the cron timing as needed)
-    - cron: "0 8 * * *"  # Runs at 8:00 AM UTC every day
-  workflow_dispatch:  # Allows manual trigger
+  workflow_dispatch: # Allows manual trigger
 
 jobs:
-  update-refresh-token:
+  update-secret:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set up GitHub Token
-        id: setup-token
-        run: |
-          echo "GH_PAT=${{ secrets.GH_PAT }}" >> $GITHUB_ENV
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-      - name: Fetch New Refresh Token from Twitch API
-        id: fetch-refresh-token
-        run: |
-          # Setup variables
-          ClientId="${{ secrets.CLIENTID }}"
-          ClientSecret="${{ secrets.CLIENTSECRET }}"
-          RefreshToken="${{ secrets.REFRESHTOKEN }}"
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-          # Get new access token using the refresh token
-          response=$(curl -X POST "https://id.twitch.tv/oauth2/token" -d "client_id=$ClientId&client_secret=$ClientSecret&grant_type=refresh_token&refresh_token=$RefreshToken")
+      - name: Install required Python packages
+        run: |
+          pip install requests pynacl
+
+      - name: Update GitHub secret with new refresh token
+        run: |
+          import os
+          import requests
+          from nacl.public import PublicKey, Box
+          from nacl.encoding import Base64Encoder
+          from nacl.exceptions import CryptoError
           
-          # Extract the new refresh token from the response
-          NewRefreshToken=$(echo $response | jq -r '.refresh_token')
+          # GitHub token and repository info
+          repo_owner = os.getenv("GITHUB_REPOSITORY_OWNER")
+          repo_name = os.getenv("GITHUB_REPOSITORY")
+          github_token = os.getenv("GH_PAT")
+          secret_name = "REFRESHTOKEN"  # The secret name in GitHub
 
-          # Save the new refresh token to an environment variable
-          echo "NEW_REFRESH_TOKEN=$NewRefreshToken" >> $GITHUB_ENV
+          # New refresh token from environment
+          new_refresh_token = os.getenv("NEW_REFRESH_TOKEN")
 
-      - name: Get GitHub Repository Public Key
-        id: get-public-key
-        run: |
-          # Fetch the public key from GitHub's API to encrypt the refresh token
-          RepoName="${{ github.repository }}"
-          GitHubToken="${{ secrets.GH_PAT }}"
+          # GitHub API endpoint to fetch public key
+          public_key_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/secrets/public_key"
+          headers = {
+              "Authorization": f"Bearer {github_token}",
+              "Accept": "application/vnd.github+json",
+          }
 
-          PublicKeyResponse=$(curl -s -H "Authorization: Bearer $GitHubToken" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/$RepoName/actions/secrets/public_key")
+          # Fetch public key
+          response = requests.get(public_key_url, headers=headers)
+          if response.status_code != 200:
+              raise Exception(f"Failed to fetch public key: {response.text}")
+          public_key_data = response.json()
+          public_key = PublicKey(public_key_data["key"], encoder=Base64Encoder)
           
-          # Extract the public key and key_id from the response
-          PublicKey=$(echo $PublicKeyResponse | jq -r '.key')
-          KeyId=$(echo $PublicKeyResponse | jq -r '.key_id')
+          # Encrypt the refresh token using LibSodium
+          try:
+              box = Box(public_key, public_key)  # Create box object to encrypt
+              encrypted_refresh_token = box.encrypt(new_refresh_token.encode(), encoder=Base64Encoder)
+          except CryptoError as e:
+              raise Exception(f"Encryption failed: {str(e)}")
 
-          echo "KEY_ID=$KeyId" >> $GITHUB_ENV
-          echo "PUBLIC_KEY=$PublicKey" >> $GITHUB_ENV
+          # Prepare payload to update the secret
+          encrypted_value = encrypted_refresh_token.decode()  # Convert bytes to string
+          key_id = public_key_data["key_id"]
 
-      - name: Encrypt New Refresh Token
-        id: encrypt-token
-        run: |
-          # Encrypt the new refresh token using GitHub's public key
-          echo "Encrypting the new refresh token..."
-      
-          # Using OpenSSL to encrypt the token
-          echo -n "${{ env.NEW_REFRESH_TOKEN }}" | openssl rsautl -encrypt -pubin -inkey <(echo "${{ env.PUBLIC_KEY }}") | base64 | tr -d '\n' > encrypted_refresh_token.txt
-          cat encrypted_refresh_token.txt
-      
-      - name: Update GitHub Secret with New Refresh Token
-        run: |
-          # Prepare the request to update the secret
-          SecretBody=$(jq -n --arg encrypted_value "$(cat encrypted_refresh_token.txt)" --arg key_id "${{ env.KEY_ID }}" \
-            '{ "encrypted_value": $encrypted_value, "key_id": $key_id }')
-      
-          # Update the secret in the GitHub repository
-          RepoName="${{ github.repository }}"
-          GitHubToken="${{ secrets.GH_PAT }}"
-      
-          curl -X PUT \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GitHubToken" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d "$SecretBody" \
-            "https://api.github.com/repos/$RepoName/actions/secrets/REFRESHTOKEN"
-      
-          echo "Refresh token secret updated successfully!"
+          # Update the secret
+          update_secret_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/actions/secrets/{secret_name}"
+          payload = {
+              "encrypted_value": encrypted_value,
+              "key_id": key_id
+          }
+
+          response = requests.put(update_secret_url, json=payload, headers=headers)
+          if response.status_code != 201:
+              raise Exception(f"Failed to update secret: {response.text}")
+
+          print("Successfully updated the refresh token secret!")
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}  # GitHub token for API access
+          NEW_REFRESH_TOKEN: ${{ secrets.NEW_REFRESH_TOKEN }}  # The new refresh token to encrypt
