@@ -40,7 +40,7 @@ jobs:
 
           # Update stream info
           $StreamTitle = "Starting the day with some Minecraft adventures!"
-          $Tags = @("Minecraft","MinecraftBuilds","MinecraftSurvival","MinecraftChallenge","MinecraftAdventure","GamingCommunity","MinecraftMemes","MinecraftFunny","MinecraftIdeas","MinecraftRedstone","MinecraftServer","MinecraftLife","MinecraftPlayer","MinecraftLover","LetsPlayMinecraft","GamingClips","GamerLife","StreamHighlights","GameStreamer","EpicPlays","FunnyMoments","GamingSetup","GamingCommunity","StreamLife","TwitchStreamer")
+          $Tags = @("Minecraft", "MinecraftHardcore", "MinecraftSurvival", "MinecraftChallenge", "GamingCommunity", "LetsPlayMinecraft", "GamingClips", "MinecraftAdventure", "GamerLife", "StreamHighlights")
 
           $UpdateBody = @{
               title = $StreamTitle
