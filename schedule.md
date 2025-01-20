@@ -8,8 +8,6 @@ Overwatch2 Tournament schedule for this month.
 
 | Date    | Time | Type | Streaming |
 | -------- | ------- |  -------- | ------- |
-| January 26, 2025 | 12:15PM - 4:00PM     | Casual | * |
-| January 25, 2025 | 5:15PM - 9:00PM     | Casual | * |
 | January 19, 2025 | 12:15PM - 4:00PM     | Casual | * |
 | January 18, 2025 | 5:15PM - 9:00PM     | Casual | * |
 | January 11, 2025 | 5:15PM - 9:00PM     | Ranked | * |
