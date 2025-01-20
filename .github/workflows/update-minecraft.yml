@@ -4,6 +4,7 @@ on:
   schedule:
     # Run Monday to Friday from 8:00 AM to 9:00 AM CST (UTC-6)
     - cron: "0 14 * * 1-5"  # 14:00 UTC is 8:00 AM CST
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   update-minecraft:
