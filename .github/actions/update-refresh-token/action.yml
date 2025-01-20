@@ -1,0 +1,27 @@
+name: 'Update Refresh Token Secret'
+description: 'GitHub Action to update the refresh token secret in a repository'
+inputs:
+  github_token:
+    description: 'GitHub Personal Access Token for API Access'
+    required: true
+  new_refresh_token:
+    description: 'The new refresh token to encrypt and store as a secret'
+    required: true
+runs:
+  using: 'python3'
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install required dependencies
+      run: |
+        pip install requests pynacl
+
+    - name: Run Python script to update GitHub secret
+      run: |
+        python3 update_secret.py
+      env:
+        GH_PAT: ${{ inputs.github_token }}
+        NEW_REFRESH_TOKEN: ${{ inputs.new_refresh_token }}
