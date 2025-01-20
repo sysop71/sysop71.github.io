@@ -1,0 +1,49 @@
+name: Update Twitch OAuth Refresh Token
+
+on:
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  update-refresh-token:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Refresh Twitch OAuth token
+        shell: pwsh
+        run: |
+          # GitHub API credentials and other necessary values
+          $GitHubToken = "${{ secrets.GH_PAT }}"
+          $ClientId = "${{ secrets.CLIENTID }}"
+          $ClientSecret = "${{ secrets.CLIENTSECRET }}"
+          $RefreshToken = "${{ secrets.REFRESHTOKEN }}"
+
+          # Get a new access token and refresh token using the refresh token
+          $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
+              client_id = $ClientId
+              client_secret = $ClientSecret
+              grant_type = "refresh_token"
+              refresh_token = $RefreshToken
+          }
+
+          $AccessToken = $TokenResponse.access_token
+          $NewRefreshToken = $TokenResponse.refresh_token
+
+          # Update GitHub secret with the new refresh token
+          $RepoName = "${{ github.repository }}"
+          $ApiUrl = "https://api.github.com/repos/$RepoName/actions/secrets/REFRESHTOKEN"
+          $Headers = @{
+              "Authorization" = "Bearer $GitHubToken"
+              "Accept" = "application/vnd.github.v3+json"
+          }
+          $SecretBody = @{
+              "encrypted_value" = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($NewRefreshToken))
+              "key_id" = (Invoke-RestMethod -Uri "https://api.github.com/repos/$RepoName/actions/secrets/public_key" -Headers $Headers).key_id
+          } | ConvertTo-Json -Depth 10
+
+          # Set the new refresh token in the GitHub secrets
+          Invoke-RestMethod -Uri $ApiUrl -Method Put -Headers $Headers -Body $SecretBody
+
+          Write-Host "Twitch refresh token has been updated successfully!"
