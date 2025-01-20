@@ -40,7 +40,7 @@ jobs:
 
           # Update stream info
           $StreamTitle = "Late-night Overwatch grind! Join the fun."
-          $Tags = @("Overwatch2","OverwatchGameplay","OverwatchFunny","OverwatchPlays","OverwatchTips","OverwatchCommunity","OverwatchMoments","OverwatchLive","OverwatchStreamer","OverwatchHighlights","ReinhardtMain","BlizzardGames","OverwatchCompetitive","FPSGaming","GamingClips","GamerLife","StreamHighlights","GameStreamer","EpicPlays","FunnyMoments","GamingSetup","GamingCommunity","StreamLife","TwitchStreamer")
+          $Tags = @("Overwatch2", "OverwatchGameplay", "OverwatchFunny", "OverwatchPlays", "OverwatchCommunity", "OverwatchMoments", "FPSGaming", "GamingClips", "GamerLife", "StreamHighlights")
 
           $UpdateBody = @{
               title = $StreamTitle
