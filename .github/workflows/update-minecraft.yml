@@ -1,0 +1,57 @@
+name: Update Twitch Stream for Minecraft
+
+on:
+  schedule:
+    # Run Monday to Friday from 8:00 AM to 9:00 AM CST (UTC-6)
+    - cron: "0 14 * * 1-5"  # 14:00 UTC is 8:00 AM CST
+
+jobs:
+  update-minecraft:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Update Twitch Stream for Minecraft
+        shell: pwsh
+        run: |
+          # Twitch API credentials from repo secrets
+          $ClientId = "${{ secrets.CLIENTID }}"
+          $ClientSecret = "${{ secrets.CLIENTSECRET }}"
+          $BroadcasterId = "${{ vars.BROADCASTERID }}"
+
+          # Get OAuth token
+          $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
+              client_id = $ClientId
+              client_secret = $ClientSecret
+              grant_type = "client_credentials"
+          }
+          $AccessToken = $TokenResponse.access_token
+
+          # Get game ID for Minecraft
+          $GameName = "Minecraft"
+          $GameResponse = Invoke-RestMethod -Uri "https://api.twitch.tv/helix/games?name=$GameName" -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+          }
+          $GameId = $GameResponse.data[0].id
+
+          # Update stream info
+          $StreamTitle = "Starting the day with some Minecraft adventures!"
+          $Tags = @("Minecraft","MinecraftBuilds","MinecraftSurvival","MinecraftChallenge","MinecraftAdventure","GamingCommunity","MinecraftMemes","MinecraftFunny","MinecraftIdeas","MinecraftRedstone","MinecraftServer","MinecraftLife","MinecraftPlayer","MinecraftLover","LetsPlayMinecraft","GamingClips","GamerLife","StreamHighlights","GameStreamer","EpicPlays","FunnyMoments","GamingSetup","GamingCommunity","StreamLife","TwitchStreamer")
+
+          $UpdateBody = @{
+              title = $StreamTitle
+              game_id = $GameId
+              broadcaster_id = $BroadcasterId
+              tags = $Tags
+          } | ConvertTo-Json -Depth 10
+
+          Invoke-RestMethod -Uri "https://api.twitch.tv/helix/channels" -Method Patch -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+              "Content-Type" = "application/json"
+          } -Body $UpdateBody
+
+          Write-Host "Minecraft stream information updated successfully!"
