@@ -21,12 +21,15 @@ jobs:
           $ClientId = "${{ secrets.CLIENTID }}"
           $ClientSecret = "${{ secrets.CLIENTSECRET }}"
           $BroadcasterId = "${{ vars.BROADCASTERID }}"
+          $RefreshToken = "${{ secrets.REFRESHTOKEN }}"  # Using the stored refresh token
 
-          # Get OAuth token
+          # Get OAuth token using the refresh token
           $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
               client_id = $ClientId
               client_secret = $ClientSecret
-              grant_type = "client_credentials"
+              grant_type = "refresh_token"
+              refresh_token = $RefreshToken
+              scope = "user:edit:broadcast channel:manage:broadcast"
           }
           $AccessToken = $TokenResponse.access_token
 
