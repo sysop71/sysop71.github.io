@@ -4,6 +4,7 @@ on:
   schedule:
     # Run Tuesday, Wednesday, Thursday from 10:00 PM to midnight CST (UTC-6)
     - cron: "0 4 * * 2-4"  # 4:00 UTC is 10:00 PM CST
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   update-overwatch:
