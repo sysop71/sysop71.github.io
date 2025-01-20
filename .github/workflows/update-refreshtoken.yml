@@ -1,40 +1,79 @@
-# GitHub API credentials and necessary values
-$GitHubToken = "${{ secrets.GH_PAT }}"
-$RepoName = "${{ github.repository }}" # This gets the repository name
-$NewRefreshToken = "new_refresh_token_here" # Get this from Twitch API
+name: Update Twitch Refresh Token Secret
 
-# Headers for GitHub API request
-$Headers = @{
-    "Authorization" = "Bearer $GitHubToken"
-    "Accept" = "application/vnd.github+json"
-    "X-GitHub-Api-Version" = "2022-11-28"
-}
+on:
+  schedule:
+    # This will run once a day at 8:00 AM UTC (you can adjust the cron timing as needed)
+    - cron: "0 8 * * *"  # Runs at 8:00 AM UTC every day
+  workflow_dispatch:  # Allows manual trigger
 
-# Fetch the public key for the repository
-$PublicKeyResponse = Invoke-RestMethod -Uri "https://api.github.com/repos/$RepoName/actions/secrets/public_key" -Headers $Headers
+jobs:
+  update-refresh-token:
+    runs-on: ubuntu-latest
 
-# Ensure that key_id is retrieved from the response
-if ($PublicKeyResponse.key_id) {
-    Write-Host "Key ID retrieved: $($PublicKeyResponse.key_id)"
-    $KeyId = $PublicKeyResponse.key_id
-} else {
-    Write-Host "Error: Key ID not found in the response."
-    exit 1
-}
+    steps:
+      - name: Set up GitHub Token
+        id: setup-token
+        run: |
+          echo "GH_PAT=${{ secrets.GH_PAT }}" >> $GITHUB_ENV
 
-# Encrypt the new refresh token using the public key
-$EncryptedValue = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($NewRefreshToken))
+      - name: Fetch New Refresh Token from Twitch API
+        id: fetch-refresh-token
+        run: |
+          # Setup variables
+          ClientId="${{ secrets.CLIENTID }}"
+          ClientSecret="${{ secrets.CLIENTSECRET }}"
+          RefreshToken="${{ secrets.REFRESHTOKEN }}"
 
-# Prepare the request body to update the secret
-$SecretBody = @{
-    "encrypted_value" = $EncryptedValue
-    "key_id" = $KeyId
-} | ConvertTo-Json -Depth 10
+          # Get new access token using the refresh token
+          response=$(curl -X POST "https://id.twitch.tv/oauth2/token" -d "client_id=$ClientId&client_secret=$ClientSecret&grant_type=refresh_token&refresh_token=$RefreshToken")
+          
+          # Extract the new refresh token from the response
+          NewRefreshToken=$(echo $response | jq -r '.refresh_token')
 
-# GitHub API URL to update the refresh token secret
-$ApiUrl = "https://api.github.com/repos/$RepoName/actions/secrets/REFRESHTOKEN"
+          # Save the new refresh token to an environment variable
+          echo "NEW_REFRESH_TOKEN=$NewRefreshToken" >> $GITHUB_ENV
 
-# Send the request to update the secret
-Invoke-RestMethod -Uri $ApiUrl -Method Put -Headers $Headers -Body $SecretBody
+      - name: Get GitHub Repository Public Key
+        id: get-public-key
+        run: |
+          # Fetch the public key from GitHub's API to encrypt the refresh token
+          RepoName="${{ github.repository }}"
+          GitHubToken="${{ secrets.GH_PAT }}"
 
-Write-Host "Refresh token updated successfully!"
+          PublicKeyResponse=$(curl -s -H "Authorization: Bearer $GitHubToken" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/$RepoName/actions/secrets/public_key")
+          
+          # Extract the public key and key_id from the response
+          PublicKey=$(echo $PublicKeyResponse | jq -r '.key')
+          KeyId=$(echo $PublicKeyResponse | jq -r '.key_id')
+
+          echo "KEY_ID=$KeyId" >> $GITHUB_ENV
+          echo "PUBLIC_KEY=$PublicKey" >> $GITHUB_ENV
+
+      - name: Encrypt New Refresh Token
+        id: encrypt-token
+        run: |
+          # Encrypt the new refresh token using GitHub's public key
+          echo "Encrypting the new refresh token..."
+
+          # Using OpenSSL to encrypt the token
+          echo -n "${{ env.NEW_REFRESH_TOKEN }}" | openssl rsautl -encrypt -pubin -inkey <(echo "${{ env.PUBLIC_KEY }}") | base64 | tr -d '\n' > encrypted_refresh_token.txt
+          cat encrypted_refresh_token.txt
+
+      - name: Update GitHub Secret with New Refresh Token
+        run: |
+          # Prepare the request to update the secret
+          SecretBody=$(jq -n --arg encrypted_value "$(cat encrypted_refresh_token.txt)" --arg key_id "${{ env.KEY_ID }}" \
+            '{ "encrypted_value": $encrypted_value, "key_id": $key_id }')
+
+          # Update the secret in the GitHub repository
+          RepoName="${{ github.repository }}"
+          GitHubToken="${{ secrets.GH_PAT }}"
+          
+          curl -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GitHubToken" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -d "$SecretBody" \
+            "https://api.github.com/repos/$RepoName/actions/secrets/REFRESHTOKEN"
+
+          echo "Refresh token secret updated successfully!"
