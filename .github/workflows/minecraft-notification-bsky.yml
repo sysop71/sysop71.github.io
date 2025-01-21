@@ -12,6 +12,7 @@ jobs:
       - name: Post to Bluesky
         uses: mod-posh/Post2BlueSky@v0.0.2.10
         with:
-          message: "Starting the day with some Minecraft adventures! Join me at 8:00 AM CST: [twitch.tv/sysop71](https://twitch.tv/sysop71) #Minecraft #MinecraftHardcore #MinecraftSurvival #MinecraftChallenge #GamingCommunity #LetsPlayMinecraft #GamingClips #MinecraftAdventure #GamerLife #StreamHighlights"
+          message: "Starting the day with some Minecraft adventures! 🛠️ Join me at 8:00 AM CST: `[twitch.tv/sysop71](https://twitch.tv/sysop71)` #Minecraft #MinecraftHardcore #MinecraftSurvival #MinecraftChallenge #GamingCommunity #LetsPlayMinecraft #GamingClips #MinecraftAdventure #GamerLife #StreamHighlights"
+          verbose: "verbose"
           bluesky_api_key: ${{ secrets.bluesky_api_key }}
           bluesky_identifier: ${{ secrets.bluesky_identifier }}
