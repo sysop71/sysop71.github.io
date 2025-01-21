@@ -10,16 +10,35 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Refresh OAuth token using refresh token
+      # Step 2: Authenticate with Azure
+      - name: Authenticate with Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 3: Retrieve Refresh Token from Azure Key Vault
+      - name: Retrieve Refresh Token from Key Vault
+        id: get-refresh-token
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "Twitch-RefreshToken"
+
+          $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # Step 4: Refresh OAuth token using the retrieved refresh token
+      - name: Update Twitch Stream for Minecraft
         shell: pwsh
         run: |
           # Twitch API credentials from repo secrets
           $ClientId = "${{ secrets.CLIENTID }}"
           $ClientSecret = "${{ secrets.CLIENTSECRET }}"
-          $RefreshToken = "${{ secrets.REFRESHTOKEN }}"  # GitHub Secret for refresh token
+          $RefreshToken = "${{ env.refresh_token }}"  # Use the retrieved refresh token
 
           # Get a new OAuth token using the refresh token
           $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{

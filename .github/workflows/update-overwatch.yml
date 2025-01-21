@@ -11,9 +11,28 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      # Step 1: Check out the repository
       - name: Check out the repository
         uses: actions/checkout@v3
 
+      # Step 2: Authenticate with Azure
+      - name: Authenticate with Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 3: Retrieve Refresh Token from Azure Key Vault
+      - name: Retrieve Refresh Token from Key Vault
+        id: get-refresh-token
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "Twitch-RefreshToken"
+
+          $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # Step 4: Update Twitch Stream for Overwatch
       - name: Update Twitch Stream for Overwatch
         shell: pwsh
         run: |
@@ -21,7 +40,7 @@ jobs:
           $ClientId = "${{ secrets.CLIENTID }}"
           $ClientSecret = "${{ secrets.CLIENTSECRET }}"
           $BroadcasterId = "${{ vars.BROADCASTERID }}"
-          $RefreshToken = "${{ secrets.REFRESHTOKEN }}"  # Using the stored refresh token
+          $RefreshToken = "${{ env.refresh_token }}"  # Use the retrieved refresh token
 
           # Get OAuth token using the refresh token
           $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
