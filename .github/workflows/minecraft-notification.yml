@@ -1,4 +1,4 @@
-name: Announce Minecraft Stream on Bluesky
+name: Announce Minecraft Stream
 
 on:
   schedule:

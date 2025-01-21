@@ -1,4 +1,4 @@
-name: Announce Overwatch Stream on Bluesky
+name: Announce Overwatch Stream
 
 on:
   schedule:
