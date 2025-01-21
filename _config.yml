@@ -65,7 +65,7 @@ minima:
       user_url: "https://twitch.tv/sysop71"
       title: Watch my stream
     - platform: youtube
-      user_url: "https://www.youtube.com/channel/UCPnbKK1hVXihEXLBOHhLRbg"
+      user_url: "https://www.youtube.com/@sysop71"
       title: My YouTube channel
     - platform: bsky
       user_url: "https://bsky.app/profile/sysop71.bsky.social"
