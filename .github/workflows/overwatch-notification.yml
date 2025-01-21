@@ -22,3 +22,9 @@ jobs:
           message: "Late-night Overwatch grind starts at 10:00 PM CST! Join the fun: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
         secrets:
           discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
+      - name: Post to Discord
+        uses: mod-posh/Post2Discord@v0.0.3.0
+        with:
+          message: "Late-night Overwatch grind starts at 10:00 PM CST! Join the fun: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
+        secrets:
+          discordWebhook: ${{ secrets.GAMESANDSTUFF_DISCORD_WEBHOOK }}
