@@ -10,14 +10,26 @@ inputs:
     required: true
 
 runs:
-  using: 'python3'
+  using: "composite"
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Run custom Python script to update refresh token secret
+    - name: Run update script
+      shell: bash
       run: |
-        python3 ./.github/actions/update-refresh-token/update_secret.py
+        echo "Encrypting the new refresh token..."
+        public_key=$(curl -s -H "Authorization: Bearer ${{ inputs.github_token }}" \
+          -H "Accept: application/vnd.github+json" \
+          https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/public_key | jq -r '.key')
+        encrypted_value=$(python3 -c "
+import base64
+from nacl import encoding, public
+key = public.PublicKey(bytes.fromhex('${public_key}'), encoding.HexEncoder())
+sealed_box = public.SealedBox(key)
+encrypted = sealed_box.encrypt('${{ inputs.new_refresh_token }}'.encode())
+print(base64.b64encode(encrypted).decode())")
+        curl -X PUT \
+          -H "Authorization: Bearer ${{ inputs.github_token }}" \
+          -H "Accept: application/vnd.github+json" \
+          -d "{\"encrypted_value\":\"$encrypted_value\",\"key_id\":\"${public_key}\"}" \
+          https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/secrets/REFRESHTOKEN
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
-        NEW_REFRESH_TOKEN: ${{ inputs.new_refresh_token }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
