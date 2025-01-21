@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Post to Bluesky
-        uses: mod-posh/Post2BlueSky@v0.0.2.10
+        uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
           message: "Late-night Overwatch grind starts at 10:00 PM CST! Join the fun: [twitch.tv/sysop71](https://twitch.tv/sysop71) #Overwatch2 #OverwatchGameplay #OverwatchFunny #OverwatchPlays #OverwatchCommunity #OverwatchMoments #FPSGaming #GamingClips #GamerLife #StreamHighlights"
           verbose: "verbose"
