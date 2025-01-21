@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Post to Bluesky
-        uses: mod-posh/Post2BlueSky@v0.0.2.10
+        uses: mod-posh/Post2BlueSky@v0.0.2.11
         with:
           message: "Starting the day with some Minecraft adventures! 🛠️ Join me at 8:00 AM CST: https://twitch.tv/sysop71 #Minecraft #MinecraftHardcore #MinecraftSurvival #MinecraftChallenge #GamingCommunity #LetsPlayMinecraft #GamingClips #MinecraftAdventure #GamerLife #StreamHighlights"
           verbose: "verbose"
