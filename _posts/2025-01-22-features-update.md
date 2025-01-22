@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Overwatch2 Mid-Season Patch"
+title:  "Feature Update"
 date:   2025-01-22 00:00:00 -0600
 categories: blog
 tags: Articles, Overwatch2, Season15
-comments: true
+comments: false
 ---
 ![Overwatch2 Mid-Season Patches](https://bnetcmsus-a.akamaihd.net/cms/blog_header/q1/Q1SQORBIZAAA1675992280286.png?)
 
