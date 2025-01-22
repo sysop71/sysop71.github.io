@@ -30,6 +30,11 @@ jobs:
         if: ${{ env.new_posts == '' }}
         run: echo "No new posts added. Exiting."
 
+      - name: Wait for GitHub Pages to Deploy (Delay)
+        run: |
+          echo "Waiting for GitHub Pages to deploy..."
+          sleep 60  # 60 seconds delay (adjust as needed)
+
       - name: Post to Bluesky
         if: ${{ env.new_posts != '' }}
         uses: mod-posh/Post2BlueSky@v0.0.3.0
