@@ -25,17 +25,25 @@ jobs:
           git fetch --depth=2
           NEW_POSTS=$(git diff --diff-filter=A --name-only HEAD^ HEAD | grep '^_posts/.*\.md$' || true)
           echo "new_posts=$NEW_POSTS" >> $GITHUB_ENV
-
-      - name: Exit if No New Posts
-        if: ${{ env.new_posts == '' }}
-        run: echo "No new posts added. Exiting."
+          if [ -z "$NEW_POSTS" ]; then
+            echo "No new posts added."
+            exit 0
+          fi
+          # Parse the first new post (adjust if multiple posts need handling)
+          POST_FILENAME=$(basename "$NEW_POSTS")
+          POST_DATE=$(echo "$POST_FILENAME" | cut -d '-' -f 1-3 | tr '-' '/')
+          POST_TITLE=$(echo "$POST_FILENAME" | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}-//' | sed 's/\.md$//')
+          POST_URL="/blog/$POST_DATE/$POST_TITLE.html"
+          echo "post_url=$POST_URL" >> $GITHUB_ENV
+          echo "post_title=$POST_TITLE" >> $GITHUB_ENV
 
       - name: Post to Bluesky
         if: ${{ env.new_posts != '' }}
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
           message: |
-            A new post is live on my blog! Check out: [Sysop71.com](https://sysop71.com/posts)
+            A new post is live: [https://sysop71.com${{ env.post_url }}](https://sysop71.com${{ env.post_url }})
+            Title: ${{ env.post_title }}
             #Jekyll #BlogUpdate #NewContent
           verbose: "verbose"
           bluesky_api_key: ${{ secrets.bluesky_api_key }}
@@ -46,5 +54,6 @@ jobs:
         uses: mod-posh/Post2Discord@v0.0.3.2
         with:
           message: |
-            A new post is live on my blog! Check out: [Sysop71.com](https://sysop71.com/posts)
+            A new post is live: [https://sysop71.com${{ env.post_url }}](https://sysop71.com${{ env.post_url }})
+            Title: ${{ env.post_title }}
           discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
