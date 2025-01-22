@@ -17,7 +17,7 @@ jobs:
           bluesky_api_key: ${{ secrets.bluesky_api_key }}
           bluesky_identifier: ${{ secrets.bluesky_identifier }}
       - name: Post to Discord
-        uses: mod-posh/Post2Discord@v0.0.3.1
+        uses: mod-posh/Post2Discord@v0.0.3.2
         with:
           message: "Starting the day with some Minecraft adventures! Tune in at 8:00 AM CST: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
           discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}

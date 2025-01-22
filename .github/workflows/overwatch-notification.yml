@@ -18,13 +18,13 @@ jobs:
           bluesky_identifier: ${{ secrets.bluesky_identifier }}
 
       - name: Post to Discord (Sysop71)
-        uses: mod-posh/Post2Discord@v0.0.3.1
+        uses: mod-posh/Post2Discord@v0.0.3.2
         with:
           message: "Late-night Overwatch grind starts at 10:00 PM CST! Join the fun: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
           discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
 
       - name: Post to Discord (Games and Stuff)
-        uses: mod-posh/Post2Discord@v0.0.3.1
+        uses: mod-posh/Post2Discord@v0.0.3.2
         with:
           message: "Late-night Overwatch grind starts at 10:00 PM CST! Join the fun: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
           discordWebhook: ${{ secrets.GAMESANDSTUFF_DISCORD_WEBHOOK }}
