@@ -1,0 +1,50 @@
+name: Announce New Post
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "_posts/**"
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Find New Blog Posts
+        id: find_new_posts
+        run: |
+          git fetch --depth=2
+          NEW_POSTS=$(git diff --diff-filter=A --name-only HEAD^ HEAD | grep '^_posts/.*\.md$' || true)
+          echo "new_posts=$NEW_POSTS" >> $GITHUB_ENV
+
+      - name: Exit if No New Posts
+        if: ${{ env.new_posts == '' }}
+        run: echo "No new posts added. Exiting."
+
+      - name: Post to Bluesky
+        if: ${{ env.new_posts != '' }}
+        uses: mod-posh/Post2BlueSky@v0.0.3.0
+        with:
+          message: |
+            A new post is live on my blog! Check out: [Sysop71.com](https://sysop71.com/posts)
+            #Jekyll #BlogUpdate #NewContent
+          verbose: "verbose"
+          bluesky_api_key: ${{ secrets.bluesky_api_key }}
+          bluesky_identifier: ${{ secrets.bluesky_identifier }}
+
+      - name: Post to Discord
+        if: ${{ env.new_posts != '' }}
+        uses: mod-posh/Post2Discord@v0.0.3.2
+        with:
+          message: |
+            A new post is live on my blog! Check out: [Sysop71.com](https://sysop71.com/posts)
+          discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
