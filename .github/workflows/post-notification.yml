@@ -3,7 +3,7 @@ name: Announce New Post
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - "_posts/**"
 
