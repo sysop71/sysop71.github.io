@@ -42,7 +42,7 @@ jobs:
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
           message: |
-            A new post is live: [https://sysop71.com${{ env.post_url }}](https://sysop71.com${{ env.post_url }})
+            A new post is live: [Sysop71.com](https://sysop71.com${{ env.post_url }})
             Title: ${{ env.post_title }}
             #Jekyll #BlogUpdate #NewContent
           verbose: "verbose"
@@ -54,6 +54,6 @@ jobs:
         uses: mod-posh/Post2Discord@v0.0.3.2
         with:
           message: |
-            A new post is live: [https://sysop71.com${{ env.post_url }}](https://sysop71.com${{ env.post_url }})
+            A new post is live: [Sysop71.com](https://sysop71.com${{ env.post_url }})
             Title: ${{ env.post_title }}
           discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
