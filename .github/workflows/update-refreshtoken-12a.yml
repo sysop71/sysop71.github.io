@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * *' # Run daily at midnight
   workflow_dispatch:  # Manually triggered from the UI
 
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+  
 jobs:
   renew-token:
     runs-on: windows-latest # Use Windows for PowerShell compatibility

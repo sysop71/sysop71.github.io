@@ -6,6 +6,10 @@ on:
     - cron: "0 4 * * 2-4"  # 4:00 UTC is 10:00 PM CST
   workflow_dispatch:  # Allows manual trigger
 
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+  
 jobs:
   update-overwatch:
     runs-on: windows-latest

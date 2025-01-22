@@ -5,6 +5,10 @@ on:
     - cron: "0 13 * * 1-5"  # 7:00 AM CST, Mon-Fri (1 hour before Minecraft stream)
   workflow_dispatch:
 
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+  
 jobs:
   send_notification:
     runs-on: ubuntu-latest
