@@ -2,13 +2,13 @@ name: Update Twitch Stream for Minecraft
 
 on:
   schedule:
-    - cron: "0 14 * * 1-5"  # Run from 8:00 AM to 9:00 AM CST, Mon-Fri
+    - cron: "30 13 * * 1-5"  # Run at 7:30 AM CST (13:30 UTC), Mon-Fri
   workflow_dispatch:  # Manual trigger
 
 env:
   ACTIONS_RUNNER_DEBUG: true
   ACTIONS_STEP_DEBUG: true
-  
+
 jobs:
   update-minecraft:
     runs-on: windows-latest

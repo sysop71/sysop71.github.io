@@ -3,13 +3,13 @@ name: Update Twitch Stream for Overwatch
 on:
   schedule:
     # Run Tuesday, Wednesday, Thursday from 10:00 PM to midnight CST (UTC-6)
-    - cron: "0 4 * * 2-4"  # 4:00 UTC is 10:00 PM CST
+    - cron: "30 3 * * 2-4"  # 3:30 UTC is 9:30 PM CST
   workflow_dispatch:  # Allows manual trigger
 
 env:
   ACTIONS_RUNNER_DEBUG: true
   ACTIONS_STEP_DEBUG: true
-  
+
 jobs:
   update-overwatch:
     runs-on: windows-latest
