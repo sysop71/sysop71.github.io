@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Twitch Streaming Schedule
+title: Streaming
 permalink: /streaming/
 ---
 ## **January 2025**
