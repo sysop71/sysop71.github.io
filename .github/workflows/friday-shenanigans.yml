@@ -1,0 +1,94 @@
+name: Update Twitch Stream for Friday Shenanigans
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  update-twitch:
+    runs-on: windows-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Authenticate with Azure
+      - name: Authenticate with Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 3: Retrieve Refresh Token from Azure Key Vault
+      - name: Retrieve Refresh Token from Key Vault
+        id: get-refresh-token
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "Twitch-RefreshToken"
+
+          $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # Step 4: Refresh OAuth token using the retrieved refresh token
+      - name: Update Twitch Stream for Friday Shenanigans
+        shell: pwsh
+        run: |
+          # Twitch API credentials from repo secrets
+          $ClientId = "${{ secrets.CLIENTID }}"
+          $ClientSecret = "${{ secrets.CLIENTSECRET }}"
+          $RefreshToken = "${{ env.refresh_token }}"  # Use the retrieved refresh token
+
+          # Get a new OAuth token using the refresh token
+          $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
+              client_id = $ClientId
+              client_secret = $ClientSecret
+              grant_type = "refresh_token"
+              refresh_token = $RefreshToken
+          }
+          $AccessToken = $TokenResponse.access_token
+
+          # Get game ID for Minecraft
+          $GameName = "Minecraft"
+          $GameResponse = Invoke-RestMethod -Uri "https://api.twitch.tv/helix/games?name=$GameName" -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+          }
+          $GameId = $GameResponse.data[0].id
+
+          # Update stream info
+          $StreamTitle = "It's time for some Friday Shenanigans! Drop by and see what's going on!"
+          $Tags = @("SmallStreamers", "Twitch", "TGIF", "GamerLife", "StreamHighlights")
+
+          $UpdateBody = @{
+              title = $StreamTitle
+              game_id = $GameId
+              broadcaster_id = "${{ vars.BROADCASTERID }}"
+              tags = $Tags
+          } | ConvertTo-Json -Depth 10
+
+          # Update stream info
+          Invoke-RestMethod -Uri "https://api.twitch.tv/helix/channels" -Method Patch -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+              "Content-Type" = "application/json"
+          } -Body $UpdateBody
+
+          Write-Host "Twitch stream information updated successfully!"
+
+      - name: Post to Bluesky
+        uses: mod-posh/Post2BlueSky@v0.0.3.0
+        with:
+          message: "It's time for Friday Shenanigans, drop by! [twitch.tv/sysop71](https://twitch.tv/sysop71) #GamingCommunity #GamingClips #GamerLife #StreamHighlights #Twitch #SmallStreamers"
+          verbose: "verbose"
+          bluesky_api_key: ${{ secrets.bluesky_api_key }}
+          bluesky_identifier: ${{ secrets.bluesky_identifier }}
+
+      - name: Post to Discord
+        uses: mod-posh/Post2Discord@v0.0.3.2
+        with:
+          message: "It's time for Friday Shenanigans, drop by! [twitch.tv/sysop71](https://twitch.tv/sysop71)"
+          discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
