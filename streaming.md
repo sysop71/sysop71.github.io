@@ -1,10 +1,9 @@
 ---
 layout: page
-title: Streaming
+title: Twitch Streaming Schedule
 permalink: /streaming/
 ---
-
-## Twitch schedule: **January 2025**
+## **January 2025**
 
 | Sun | Mon                                   | Tue                                            | Wed                                            | Thu                                            | Fri                                   | Sat |
 |-----|---------------------------------------|------------------------------------------------|------------------------------------------------|------------------------------------------------|---------------------------------------|-----|
@@ -13,3 +12,10 @@ permalink: /streaming/
 | **12** |  **13** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) |  **14** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2353097863) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2353752170) |  **15** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2353976207) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2354609975) |  **16** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2354846958) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2355490464) | **17** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) | **18** <br> **Overwatch 2 Casual Console Tournament**: [5p-9p](https://www.twitch.tv/videos/2357151461) |
 | **19** <br> **Overwatch 2 Casual Console Tournament**: [Noon-4p](https://www.twitch.tv/videos/2357871138) |  **20** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) |  **21** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2359513066) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2360175921) |  **22** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2360420703) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2360175921) |  **23** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2361314348) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/videos/2361978587) | **24** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/videos/2362204563) | **25** |
 | **26** |  **27** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) |  **28** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/sysop71) |  **29** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/sysop71) |  **30** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) <br> **Overwatch 2**: [10p-Midnight](https://www.twitch.tv/sysop71) | **31** <br> **Minecraft**: [8a-9a](https://www.twitch.tv/sysop71) |     |
+
+Friday Shenanigans are a free for all, I'm not sure when or if those streams will happen, as it revolves around my work. There are a handful of games that I'll play:
+
+- Doom
+- Subnautica
+- WoW
+- Baldurs Gate 3
