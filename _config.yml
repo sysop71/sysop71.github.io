@@ -32,7 +32,7 @@ paginate_path: /posts/page:num
 header_pages:
  - posts.md
  - tournaments.md
- - schedule.md
+ - calendar.md
  - streaming.md
  - about.md
 
@@ -48,6 +48,7 @@ collections:
     team:
     sub:
     output: true
+    date:
 
 minima:
   skin: dark
