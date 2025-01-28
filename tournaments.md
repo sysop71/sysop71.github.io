@@ -28,6 +28,5 @@ Overwatch2 Tournament schedule for this month.
 
   <li>
     <a href="{{ tournament.url }}">{{ tournament.title }}</a>
-    <span>{{ tournament.date | date: "%B %d, %Y - %I:%M %p" }}</span>
   </li>
 {% endfor %}
