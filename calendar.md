@@ -6,21 +6,20 @@ show_title: false
 ---
 
 <div class="calendar-container">
-  {% assign month_numbers = "January,February,March,April,May,June,July,August,September,October,November,December" | split: ',' %}
+  {% assign months = "January,February,March,April,May,June,July,August,September,October,November,December" | split: ',' %}
   {% assign years = site.calendars | map: 'year' | uniq | sort %}
 
   {% for year in years %}
     <h2>{{ year }}</h2>
     <div class="calendar-grid">
-      {% for month in month_numbers %}
+      {% for month in months %}
         {% assign month_doc = site.calendars | where: "month", month | where: "year", year | first %}
-        {% if month_doc %}
-          <div class="calendar-item">
-            <a href="{{ month_doc.url | relative_url }}">{{ month_doc.title }}</a>
-          </div>
-        {% else %}
-          <div class="calendar-item">{{ month }}</div>
-        {% endif %}
+        <div class="calendar-month">
+          <a href="{{ month_doc.url | relative_url }}">
+            <div class="month-title">{{ month }}</div>
+            <div class="month-year">{{ year }}</div>
+          </a>
+        </div>
       {% endfor %}
     </div>
   {% endfor %}
@@ -33,21 +32,31 @@ show_title: false
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  max-width: 600px;
+  grid-gap: 1rem;
+  max-width: 900px;
   margin: 0 auto;
+  padding: 20px;
 }
-.calendar-item {
-  padding: 1rem;
+.calendar-month {
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
+  padding: 10px;
+  text-align: center;
+  transition: all 0.3s ease;
 }
-.calendar-item a {
-  text-decoration: none;
-  color: #007acc;
+.calendar-month:hover {
+  background-color: #007acc;
+  color: white;
 }
-.calendar-item a:hover {
-  text-decoration: underline;
+.month-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.month-year {
+  font-size: 1rem;
+  color: #888;
 }
 </style>
 
