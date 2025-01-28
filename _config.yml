@@ -47,8 +47,13 @@ collections:
     competitive:
     team:
     sub:
-    output: true
     date:
+    output: true
+  calendars:
+    title:
+    month:
+    year:
+    output: true
 
 minima:
   skin: dark
