@@ -1,5 +1,6 @@
 ---
 layout: page
+title: Tournaments
 permalink: /tournaments/
 author: Jeff
 ---

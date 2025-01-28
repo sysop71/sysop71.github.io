@@ -1,5 +1,6 @@
 ---
 layout: page
+title: Streaming
 permalink: /streaming/
 ---
 ## **January 2025**
