@@ -18,7 +18,6 @@ Overwatch2 Tournament schedule for this month.
 {% assign sorted_tournaments = site.tournaments | sort: "date" | reverse %}
 
 {% assign current_year = "" %}
-<ul>
 {% for tournament in sorted_tournaments %}
   {% assign tournament_year = tournament.date | date: "%Y" %}
 
@@ -32,4 +31,3 @@ Overwatch2 Tournament schedule for this month.
     <span>{{ tournament.date | date: "%B %d, %Y - %I:%M %p" }}</span>
   </li>
 {% endfor %}
-</ul>
