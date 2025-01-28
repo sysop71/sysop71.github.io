@@ -38,7 +38,6 @@ show_title: false
   padding: 20px;
 }
 .calendar-month {
-  background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
   padding: 10px;
