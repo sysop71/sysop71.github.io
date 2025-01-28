@@ -5,7 +5,6 @@ permalink: /calendar/
 ---
 
 <div class="calendar-container">
-  <h1>{{ page.title }}</h1>
   <div class="calendar-grid">
     {% assign months = "January,February,March,April,May,June,July,August,September,October,November,December" | split: ',' %}
     {% for month in months %}
@@ -34,7 +33,6 @@ permalink: /calendar/
 }
 .calendar-item {
   padding: 1rem;
-  background: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
 }
