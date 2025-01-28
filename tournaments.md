@@ -15,11 +15,21 @@ Overwatch2 Tournament schedule for this month.
 | January 10, 2025  | 7:15PM - 11:00PM    | Casual | * |
 | January 9, 2025  | 5:00PM - 8:00PM    | Practice | * |
 
-{% for tournament in site.tournaments %}
-  {% assign currentdate = tournament.date | date: "%Y" %}
-  {% if currentdate != date %}
-      {{ currentdate }}
-    {% assign date = currentdate %}
+{% assign sorted_tournaments = site.tournaments | sort: "date" | reverse %}
+
+{% assign current_year = "" %}
+<ul>
+{% for tournament in sorted_tournaments %}
+  {% assign tournament_year = tournament.date | date: "%Y" %}
+
+  {% if tournament_year != current_year %}
+    <h2>{{ tournament_year }}</h2>
+    {% assign current_year = tournament_year %}
   {% endif %}
-  <li><a href="{{ tournament.url }}">{{ tournament.title }}</a></li>
+
+  <li>
+    <a href="{{ tournament.url }}">{{ tournament.title }}</a>
+    <span>{{ tournament.date | date: "%B %d, %Y - %I:%M %p" }}</span>
+  </li>
 {% endfor %}
+</ul>
