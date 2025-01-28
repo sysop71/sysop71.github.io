@@ -15,7 +15,7 @@
 # in the templates via {{ site.myvariable }}.
 title: sysop71.com
 description: >- # this means to ignore newlines until "baseurl:"
-  sysop71#1297
+  Sysop71.com: Your go-to hub for gaming streams, e-sports highlights, and personal tech insights.
 #baseurl: "/pattontech" # the subpath of your site, e.g. /blog
 url: "https://sysop71.com" # the base hostname & protocol for your site, e.g. http://example.com
 author:
