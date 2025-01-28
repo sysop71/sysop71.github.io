@@ -2,6 +2,7 @@
 layout: page
 title: About
 permalink: /about/
+show_title: false
 ---
 
 Welcome to my corner of the internet! I'm not just a gamer; I'm a passionate gamer and small streamer who's been building and battling my way through video game worlds since the early days of Doom. Whether you're here to learn more about me, share some gaming stories, or join the fun, I'm excited to have you along.

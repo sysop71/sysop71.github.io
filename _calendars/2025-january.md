@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: calendar
 title: January 2025
 month: January
 year: 2025

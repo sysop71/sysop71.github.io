@@ -3,6 +3,7 @@ layout: page
 title: Tournaments
 permalink: /tournaments/
 author: Jeff
+show_title: false
 ---
 Overwatch2 Tournament schedule for this month.
 

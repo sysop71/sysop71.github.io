@@ -2,6 +2,7 @@
 layout: page
 title: Calendar
 permalink: /calendar/
+show_title: false
 ---
 
 <div class="calendar-container">
