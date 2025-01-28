@@ -46,7 +46,7 @@ jobs:
         if: ${{ env.new_posts != '' }}
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
-          message: |
+          Message: |
             A new post is live: [Sysop71.com](https://sysop71.com${{ env.post_url }})
             Title: ${{ env.post_title }}
             #Overwatch #GamingNews #Esports #GamerLife #GamingCommunity

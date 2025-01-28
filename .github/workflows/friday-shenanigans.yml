@@ -82,7 +82,7 @@ jobs:
       - name: Post to Bluesky
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
-          message: "It's time for Friday Shenanigans, drop by! [twitch.tv/sysop71](https://twitch.tv/sysop71) #GamingCommunity #GamingClips #GamerLife #StreamHighlights #Twitch #SmallStreamers"
+          Message: "It's time for Friday Shenanigans, drop by! [twitch.tv/sysop71](https://twitch.tv/sysop71) #GamingCommunity #GamingClips #GamerLife #StreamHighlights #Twitch #SmallStreamers"
           verbose: "verbose"
           bluesky_api_key: ${{ secrets.bluesky_api_key }}
           bluesky_identifier: ${{ secrets.bluesky_identifier }}

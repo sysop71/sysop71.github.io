@@ -39,7 +39,7 @@ jobs:
         if: ${{ env.new_posts != '' }}
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
-          message: |
+          Message: |
             Tournament Results In! Check out: [Sysop71.com](https://sysop71.com/tournaments)
             #Jekyll #BlogUpdate #NewContent
           verbose: "verbose"
