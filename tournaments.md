@@ -23,7 +23,7 @@ Overwatch2 Tournament schedule for this month.
   {% assign tournament_year = tournament.date | date: "%Y" %}
 
   {% if tournament_year != current_year %}
-    {{ tournament_year }}
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{{ tournament_year }}</code></pre></div></div>
     {% assign current_year = tournament_year %}
   {% endif %}
 
