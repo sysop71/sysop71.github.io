@@ -6,7 +6,7 @@ categories: blog
 tags: Articles, Overwatch2, OWCS
 comments: true
 ---
-![Overwatch2 Mid-Season Patches](https://esports.overwatch.com/_next/image?&q=100&w=1920&url=https://a.storyblok.com/f/267720/1920x1080/7abb777c0f/stage1kbugheader.png)
+![Overwatch Champion Series (OWCS)](https://esports.overwatch.com/_next/image?&q=100&w=1920&url=https://a.storyblok.com/f/267720/1920x1080/7abb777c0f/stage1kbugheader.png)
 
 ## Overwatch Champion Series Stage 1
 
