@@ -3,7 +3,7 @@ layout: post
 title:  "Overwatch Champion Series Stage 1"
 date:   2025-01-27 00:00:00 -0600
 categories: blog
-tags: Articles, Overwatch2, OWCS
+tags: Overwatch2, OWCS, GamingNews, Esports, GamerLife, GamingCommunity
 comments: true
 ---
 ![Overwatch Champion Series (OWCS)](https://esports.overwatch.com/_next/image?&q=100&w=1920&url=https://a.storyblok.com/f/267720/1920x1080/7abb777c0f/stage1kbugheader.png)

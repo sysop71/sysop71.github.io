@@ -3,7 +3,7 @@ layout: post
 title:  "Overwatch2 January Patch Notes"
 date:   2025-01-29 00:00:00 -0600
 categories: blog
-tags: Articles, Overwatch2
+tags: Overwatch2, Patch Notes, GamingNews, GamerLife, GamingCommunity
 comments: true
 ---
 ![Overwatch2 Quickplay Bots](https://images.blz-contentstack.com/v3/assets/blt2477dcaf4ebd440c/blta12828c588a192aa/5cf15dedcf7aa6330ac66a05/wrecking-ball-screenshot-004.jpg?auto=webp)

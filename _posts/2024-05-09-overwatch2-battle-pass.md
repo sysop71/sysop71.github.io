@@ -3,7 +3,7 @@ layout: post
 title:  "How does the Overwatch 2 Battle Pass stack up"
 date:   2024-05-09 00:00:00 -0600
 categories: blog
-tags: Articles
+tags: Overwatch2, Battle Pass, GamingNews, GamerLife, GamingCommunity
 comments: false
 ---
 

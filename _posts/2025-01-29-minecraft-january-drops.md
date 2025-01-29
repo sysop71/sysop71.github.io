@@ -3,7 +3,7 @@ layout: post
 title:  "Minecraft January Drops"
 date:   2025-01-29 00:00:00 -0600
 categories: blog
-tags: Articles, Minecraft
+tags: Minecraft, Drops, GamingNews, GamerLife, GamingCommunity
 comments: true
 ---
 ![Minecraft January Drops](https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/game-updates/Minecraft_sp25_testing_jan29_.Det_Blog_Editorial_EditorialExclusive_1_1170x500.jpg)

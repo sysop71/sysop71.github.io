@@ -3,7 +3,7 @@ layout: post
 title:  "Is the Mythic Shop in Overwatch 2 overpriced?"
 date:   2024-05-07 00:00:00 -0600
 categories: blog
-tags: Articles
+tags: Overwatch2, Shop, GamingNews, GamerLife, GamingCommunity
 comments: false
 ---
 

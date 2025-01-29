@@ -3,7 +3,7 @@ layout: post
 title:  "What is Countering in Overwatch2"
 date:   2024-05-02 00:00:00 -0600
 categories: blog
-tags: Articles
+tags: Overwatch2, Tips and Tricks, GamingNews, GamerLife, GamingCommunity
 comments: false
 ---
 

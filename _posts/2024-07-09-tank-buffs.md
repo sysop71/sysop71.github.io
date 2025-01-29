@@ -3,7 +3,7 @@ layout: post
 title:  "Tank Buffs"
 date:   2024-07-09 00:00:00 -0600
 categories: blog
-tags: Articles
+tags: Overwatch2, GamingNews, GamerLife, GamingCommunity
 comments: false
 ---
 
