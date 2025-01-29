@@ -8,7 +8,7 @@ comments: true
 ---
 ![Minecraft January Drops](https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/game-updates/Minecraft_sp25_testing_jan29_.Det_Blog_Editorial_EditorialExclusive_1_1170x500.jpg)
 
-## January Minecraft Drops: Fresh Mobs, Glowing Plants, and Desert Tunes!
+## January Minecraft Drops: Fresh Mobs, Glowing Plants, and Desert Tunes
 
 Hey, Minecrafters! The first significant drop of 2025 is almost here, and trust me, you'll love it. We're introducing two adorable new cow variants that will add diversity to your farms, a sparkling bush that will light up your nights, and some seriously immersive desert vibes that will enhance your exploration experience. Whether you're an explorer, a builder, or just here for the cute animals, there's something in this update that will enhance your gameplay. So, let's dive into what's new and exciting in the Overworld!
 
