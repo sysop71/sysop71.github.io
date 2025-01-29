@@ -3,7 +3,7 @@ layout: post
 title:  "HOWTO: Use Symmetra Teleporters"
 date:   2024-04-28 00:00:00 -0600
 categories: blog
-tags: Articles
+tags: Overwatch2, Symmetra, GamingNews, GamerLife, GamingCommunity
 comments: false
 ---
 
