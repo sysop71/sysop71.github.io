@@ -37,8 +37,9 @@ jobs:
           POST_URL="/blog/$POST_DATE/$(echo "$POST_FILENAME" | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}-//' | sed 's/\.md$//').html"
 
           # Extract front matter values
-          POST_TITLE=$(awk -F': ' '/^title:/ {print $2; exit}' "$POST_FILE" | tr -d '"')
-          POST_TAGS=$(awk -F': ' '/^tags:/ {gsub(", ", " #", $2); print "#" $2; exit}' "$POST_FILE")
+          POST_TITLE=$(awk -F': ' '/^title:/ {print substr($0, index($0,$2))}' "$POST_FILE" | tr -d '"')
+          POST_TAGS=$(awk -F': ' '/^tags:/ {print substr($0, index($0,$2))}' "$POST_FILE" | sed 's/, */,/g' | tr ',' '\n' | sed 's/ /_/g' | sed 's/^/#/' | tr '\n' ' ')
+
 
           echo "post_url=$POST_URL" >> $GITHUB_ENV
           echo "post_title=$POST_TITLE" >> $GITHUB_ENV
