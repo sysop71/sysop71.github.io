@@ -1,0 +1,102 @@
+name: Update Twitch Stream with Custom Input
+
+on:
+  workflow_dispatch:
+    inputs:
+      stream_title:
+        description: "Enter the stream title"
+        required: true
+        default: "It's time for some gaming fun!"
+      game_name:
+        description: "Enter the game being played"
+        required: true
+        default: "Overwatch 2"
+      tags:
+        description: "Enter tags (comma-separated)"
+        required: false
+        default: "SmallStreamers,Twitch,GamerLife,StreamHighlights"
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  update-twitch:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate with Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Retrieve Refresh Token from Key Vault
+        id: get-refresh-token
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "Twitch-RefreshToken"
+
+          $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Update Twitch Stream with User Input
+        shell: pwsh
+        run: |
+          $ClientId = "${{ secrets.CLIENTID }}"
+          $ClientSecret = "${{ secrets.CLIENTSECRET }}"
+          $RefreshToken = "${{ env.refresh_token }}"
+
+          # Get a new OAuth token
+          $TokenResponse = Invoke-RestMethod -Uri "https://id.twitch.tv/oauth2/token" -Method Post -Body @{
+              client_id = $ClientId
+              client_secret = $ClientSecret
+              grant_type = "refresh_token"
+              refresh_token = $RefreshToken
+          }
+          $AccessToken = $TokenResponse.access_token
+
+          # Get game ID for user-specified game
+          $GameName = "${{ github.event.inputs.game_name }}"
+          $GameResponse = Invoke-RestMethod -Uri "https://api.twitch.tv/helix/games?name=$GameName" -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+          }
+          $GameId = $GameResponse.data[0].id
+
+          # Get title and tags from user input
+          $StreamTitle = "${{ github.event.inputs.stream_title }}"
+          $Tags = "${{ github.event.inputs.tags }}" -split ","
+
+          # Update Twitch stream
+          $UpdateBody = @{
+              title = $StreamTitle
+              game_id = $GameId
+              broadcaster_id = "${{ vars.BROADCASTERID }}"
+              tags = $Tags
+          } | ConvertTo-Json -Depth 10
+
+          Invoke-RestMethod -Uri "https://api.twitch.tv/helix/channels" -Method Patch -Headers @{
+              "Client-ID" = $ClientId
+              "Authorization" = "Bearer $AccessToken"
+              "Content-Type" = "application/json"
+          } -Body $UpdateBody
+
+          Write-Host "Twitch stream updated successfully!"
+
+      - name: Post to Bluesky
+        uses: mod-posh/Post2BlueSky@v0.0.3.0
+        with:
+          Message: "${{ github.event.inputs.stream_title }} Join the stream now! [twitch.tv/sysop71](https://twitch.tv/sysop71) #${{ github.event.inputs.tags }}"
+          verbose: "verbose"
+          bluesky_api_key: ${{ secrets.bluesky_api_key }}
+          bluesky_identifier: ${{ secrets.bluesky_identifier }}
+
+      - name: Post to Discord
+        uses: mod-posh/Post2Discord@v0.0.3.2
+        with:
+          message: "${{ github.event.inputs.stream_title }} Join now! [twitch.tv/sysop71](https://twitch.tv/sysop71)"
+          discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
