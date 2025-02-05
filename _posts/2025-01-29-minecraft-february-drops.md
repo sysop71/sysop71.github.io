@@ -8,7 +8,7 @@ comments: true
 ---
 ![Minecraft February Drops](https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/game-updates/MCV_SpringDrop_testing_Jan8_Editorial_Exclusive_DotNet_1170x500.jpg)
 
-## Februaryt Minecraft Drops: Chickens and Cactus Flowers
+## February Minecraft Drops: Chickens and Cactus Flowers
 
 Minecraft players, get ready to dive into the whimsical world of the first game update of 2025. This update brings a delightful assortment of new features to test in both Java snapshot and Bedrock beta/preview versions. The changes are just whimsy enough to spark fun questions such as "What came first, cold chicken or blue egg?"
 
