@@ -14,7 +14,7 @@ on:
       tags:
         description: "Enter tags (comma-separated)"
         required: false
-        default: "SmallStreamers,Twitch,GamerLife,StreamHighlights"
+        default: "SmallStreamers,GamerLife,StreamHighlights"
 
 env:
   ACTIONS_RUNNER_DEBUG: true
