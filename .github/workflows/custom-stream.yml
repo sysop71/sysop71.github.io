@@ -39,7 +39,6 @@ jobs:
         run: |
           $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
           $SecretName = "Twitch-RefreshToken"
-
           $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
           Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
@@ -67,9 +66,9 @@ jobs:
           }
           $GameId = $GameResponse.data[0].id
 
-          # Get title and tags from user input
+          # Get title and properly format tags
           $StreamTitle = "${{ github.event.inputs.stream_title }}"
-          $Tags = "${{ github.event.inputs.tags }}" -split ","
+          $Tags = @("${{ github.event.inputs.tags }}".Split(",") | ForEach-Object { $_.Trim() })
 
           # Update Twitch stream
           $UpdateBody = @{
@@ -87,10 +86,18 @@ jobs:
 
           Write-Host "Twitch stream updated successfully!"
 
+      - name: Format Tags for Social Media
+        id: format-tags
+        shell: pwsh
+        run: |
+          $TagsArray = @("${{ github.event.inputs.tags }}".Split(",") | ForEach-Object { "#$($_.Trim())" })
+          $TagsString = $TagsArray -join " "
+          Write-Output "formatted_tags=$TagsString" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Post to Bluesky
         uses: mod-posh/Post2BlueSky@v0.0.3.0
         with:
-          Message: "${{ github.event.inputs.stream_title }} Join the stream now! [twitch.tv/sysop71](https://twitch.tv/sysop71) #${{ github.event.inputs.tags }}"
+          Message: "${{ github.event.inputs.stream_title }} Join the stream now! [twitch.tv/sysop71](https://twitch.tv/sysop71) ${{ env.formatted_tags }}"
           verbose: "verbose"
           bluesky_api_key: ${{ secrets.bluesky_api_key }}
           bluesky_identifier: ${{ secrets.bluesky_identifier }}
