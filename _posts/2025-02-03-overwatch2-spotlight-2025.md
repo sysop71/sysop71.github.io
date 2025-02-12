@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Director's Take Febrary 2025"
-date:   2025-02-03 00:00:00 -0600
+title:  "Overwatch2 Spotlight"
+date:   2025-02-12 00:00:00 -0600
 categories: blog
 tags: Overwatch2, Spotlight, OverwatchSeason15, GamingNews, GamerLife, GamingCommunity
 comments: true
