@@ -61,7 +61,7 @@ jobs:
 
           # Update stream info
           $StreamTitle = "It's time for some Friday Shenanigans! Drop by and see what's going on!"
-          $Tags = @("SmallStreamers", "Twitch", "TGIF", "GamerLife", "StreamHighlights")
+          $Tags = @("SmallStreamers", "TGIF", "GamerLife", "StreamHighlights")
 
           $UpdateBody = @{
               title = $StreamTitle
