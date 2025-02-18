@@ -54,10 +54,18 @@ jobs:
           Write-Host "Access token retrieved successfully."
           Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Install MongoDB Driver
+        shell: pwsh
+        run: |
+          Install-Package -Name MongoDB.Driver -Source nuget.org -Force
+
       - name: Collect YouTube Metrics for Backfill
         id: collect-youtube
         shell: pwsh
         run: |
+          # Import MongoDB driver module
+          Add-Type -Path "C:\Program Files\PackageManagement\NuGet\Packages\MongoDB.Driver.xxx\lib\netstandard2.0\MongoDB.Driver.dll"
+
           # Get the channel ID from the repository variable
           $ChannelId = "${{ vars.CHANNEL_ID }}"
 
@@ -104,7 +112,6 @@ jobs:
                 Authorization = "Bearer $AccessToken"
                 Accept = "application/json"
               }
-
 
               # Map the columns to the corresponding values in the rows
               $ColumnHeaders = $Response.columnHeaders
