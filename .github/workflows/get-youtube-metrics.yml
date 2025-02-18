@@ -55,6 +55,61 @@ jobs:
           Write-Host "Access token retrieved successfully."
           Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Process Missing Date Metrics
+        id: process-metrics
+        shell: pwsh
+        run: |
+          $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
+          $ChannelId = "${{ vars.CHANNEL_ID }}"
+          $AccessToken = "${{ env.access_token }}"
+
+          if (-not $AccessToken) {
+            Write-Error "Access token is missing."
+            exit 1
+          }
+            
+          $MissingDatesFile = "missing_dates.txt"
+          if (Test-Path $MissingDatesFile) {
+              $MissingDates = Get-Content $MissingDatesFile
+              $NewMissingDates = @()
+              foreach ($Date in $MissingDates) {
+                  $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
+                  $Response = Invoke-RestMethod -Uri $ApiUrl -Method Get -Headers @{Authorization = "Bearer $AccessToken"} -Body @{
+                      "ids"            = "channel==${{ vars.CHANNEL_ID }}"
+                      "startDate"      = $Date
+                      "endDate"        = $Date
+                      "metrics"        = "views,estimatedMinutesWatched,likes"
+                  } -ContentType "application/json"
+                  if ($Response.rows.Count -gt 0) {
+                      $ColumnHeaders = $Response.columnHeaders
+                      $RowData = @()
+                      foreach ($Row in $Response.rows) {
+                          $MappedRow = @{}
+                          for ($i = 0; $i -lt $Row.Count; $i++) {
+                              $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+                          }
+                          $RowData += $MappedRow
+                      }
+                      $Data = @{ date = $Date; metrics = $RowData }
+                      $MongoUri = "${{ secrets.MONGODB_URI }}"
+                      $MongoDbName = "metrics"
+                      $MongoCollection = "youtube"
+                      $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
+                      $Database = $MongoClient.GetDatabase($MongoDbName)
+                      $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+                      $Collection.InsertOne($Data)
+                      Write-Host "Metrics for $Date inserted into MongoDB."
+                  } else {
+                      $NewMissingDates += $Date
+                  }
+              }
+              if ($NewMissingDates.Count -eq 0) {
+                  Remove-Item $MissingDatesFile
+              } else {
+                  $NewMissingDates | Set-Content $MissingDatesFile
+              }
+          }
+
       - name: Collect YouTube Metrics
         id: collect-metrics
         shell: pwsh
