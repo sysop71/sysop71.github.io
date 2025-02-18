@@ -76,7 +76,7 @@ jobs:
             "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
           }) -join "&"
 
-          $ApiRequestUrl = "$ApiUrl?$EncodedQueryString"
+          $ApiRequestUrl = "$($ApiUrl)?$($EncodedQueryString)"
           Write-Host "Requesting YouTube metrics for $FormattedDate..."
 
           try {
