@@ -95,7 +95,7 @@ jobs:
               }) -join "&"
 
               # Construct the final API URL
-              $ApiRequestUrl = "$ApiUrl?$EncodedQueryString"
+              $ApiRequestUrl = "$($ApiUrl)?$($EncodedQueryString)"
 
               Write-Host "API Request URL: $ApiRequestUrl"  # Debugging output
 
