@@ -43,67 +43,96 @@ jobs:
           $ClientId = "${{ secrets.YT_CLIENT_ID }}"
           $ClientSecret = "${{ secrets.YT_CLIENT_SECRET }}"
           $RefreshToken = "${{ env.refresh_token }}"
-          $RedirectUri = "urn:ietf:wg:oauth:2.0:oob" # Use your redirect URI here
 
-          # Make the API request to get the access token using the refresh token
           $TokenResponse = Invoke-RestMethod -Uri "https://oauth2.googleapis.com/token" -Method Post -Body @{
               client_id     = $ClientId
               client_secret = $ClientSecret
               refresh_token = $RefreshToken
               grant_type    = "refresh_token"
-              redirect_uri  = $RedirectUri
           } -ContentType "application/x-www-form-urlencoded"
 
           $AccessToken = $TokenResponse.access_token
           Write-Host "Access token retrieved successfully."
           Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Collect YouTube Metrics
-        id: collect-youtube
+      - name: Process Missing Dates and Collect YouTube Metrics
+        id: process-metrics
         shell: pwsh
         run: |
-          # Get the channel ID from the repository variable
-          $ChannelId = "${{ vars.CHANNEL_ID }}"
+          $MissingDatesFile = "missing_dates.txt"
+          if (Test-Path $MissingDatesFile) {
+              $MissingDates = Get-Content $MissingDatesFile
+              $NewMissingDates = @()
+              foreach ($Date in $MissingDates) {
+                  $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
+                  $Response = Invoke-RestMethod -Uri $ApiUrl -Method Get -Headers @{Authorization = "Bearer $AccessToken"} -Body @{
+                      "ids"            = "channel==${{ vars.CHANNEL_ID }}"
+                      "startDate"      = $Date
+                      "endDate"        = $Date
+                      "metrics"        = "views,estimatedMinutesWatched,likes"
+                  } -ContentType "application/json"
 
-          # Define the YouTube Analytics API endpoint
+                  if ($Response.rows.Count -gt 0) {
+                      $ColumnHeaders = $Response.columnHeaders
+                      $RowData = @()
+                      foreach ($Row in $Response.rows) {
+                          $MappedRow = @{}
+                          for ($i = 0; $i -lt $Row.Count; $i++) {
+                              $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+                          }
+                          $RowData += $MappedRow
+                      }
+
+                      $Data = @{ date = $Date; metrics = $RowData }
+                      $MongoUri = "${{ secrets.MONGODB_URI }}"
+                      $MongoDbName = "metrics"
+                      $MongoCollection = "youtube"
+                      $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
+                      $Database = $MongoClient.GetDatabase($MongoDbName)
+                      $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+                      $Collection.InsertOne($Data)
+                      Write-Host "Metrics for $Date inserted into MongoDB."
+                  } else {
+                      $NewMissingDates += $Date
+                  }
+              }
+              if ($NewMissingDates.Count -eq 0) {
+                  Remove-Item $MissingDatesFile
+              } else {
+                  $NewMissingDates | Set-Content $MissingDatesFile
+              }
+          }
+
+          # Process today's metrics as usual
+          $Today = (Get-Date).ToString("yyyy-MM-dd")
           $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
-          $StartDate = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
-          $EndDate = (Get-Date).ToString("yyyy-MM-dd")
-
-          # Make the API request to YouTube Analytics API to get metrics
           $Response = Invoke-RestMethod -Uri $ApiUrl -Method Get -Headers @{Authorization = "Bearer $AccessToken"} -Body @{
-              "ids"            = "channel==${ChannelId}"
-              "startDate"      = $StartDate
-              "endDate"        = $EndDate
+              "ids"            = "channel==${{ vars.CHANNEL_ID }}"
+              "startDate"      = $Today
+              "endDate"        = $Today
               "metrics"        = "views,estimatedMinutesWatched,likes"
           } -ContentType "application/json"
 
-          # Map the columns to the corresponding values in the rows
-          $ColumnHeaders = $Response.columnHeaders
-          $RowData = @()
-          foreach ($Row in $Response.rows) {
-              $MappedRow = @{}
-              for ($i = 0; $i -lt $Row.Count; $i++) {
-                  $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+          if ($Response.rows.Count -gt 0) {
+              $ColumnHeaders = $Response.columnHeaders
+              $RowData = @()
+              foreach ($Row in $Response.rows) {
+                  $MappedRow = @{}
+                  for ($i = 0; $i -lt $Row.Count; $i++) {
+                      $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+                  }
+                  $RowData += $MappedRow
               }
-              $RowData += $MappedRow
+
+              $Data = @{ date = $Today; metrics = $RowData }
+              $MongoUri = "${{ secrets.MONGODB_URI }}"
+              $MongoDbName = "metrics"
+              $MongoCollection = "youtube"
+              $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
+              $Database = $MongoClient.GetDatabase($MongoDbName)
+              $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+              $Collection.InsertOne($Data)
+              Write-Host "Today's metrics inserted into MongoDB."
+          } else {
+              Write-Host "No metrics data for today."
           }
-
-          # Format data for MongoDB insertion (without platform field)
-          $Data = @{
-              date       = (Get-Date).ToString("yyyy-MM-dd")
-              metrics    = $RowData
-          }
-
-          # Insert the data into MongoDB
-          $MongoUri = "${{ secrets.MONGODB_URI }}"
-          $MongoDbName = "metrics"
-          $MongoCollection = "youtube"
-
-          # Connect to MongoDB and insert the data
-          $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
-          $Database = $MongoClient.GetDatabase($MongoDbName)
-          $Collection = $Database.GetCollection[PSObject]($MongoCollection)
-          $Collection.InsertOne($Data)
-
-          Write-Host "YouTube metrics inserted into MongoDB successfully."
