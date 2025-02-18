@@ -89,14 +89,22 @@ jobs:
                 metrics     = "views,estimatedMinutesWatched,likes"
               }
 
-              $QueryString = ($QueryParams.GetEnumerator() | ForEach-Object { "$($_.Key)=$($_.Value)" }) -join "&"
-              $ApiRequestUrl = "$ApiUrl?$QueryString"
+              # Ensure proper URL encoding
+              $EncodedQueryString = ($QueryParams.GetEnumerator() | ForEach-Object {
+                "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
+              }) -join "&"
+
+              # Construct the final API URL
+              $ApiRequestUrl = "$ApiUrl?$EncodedQueryString"
+
+              Write-Host "API Request URL: $ApiRequestUrl"  # Debugging output
 
               # Make the API request
               $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
                 Authorization = "Bearer $AccessToken"
                 Accept = "application/json"
               }
+
 
               # Map the columns to the corresponding values in the rows
               $ColumnHeaders = $Response.columnHeaders
