@@ -55,6 +55,16 @@ jobs:
           Write-Host "Access token retrieved successfully."
           Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+      - name: Install and Import PoshMongo Module
+        shell: pwsh
+        run: |
+          Install-Module -Name PoshMongo -Force -Scope CurrentUser
+          Import-Module PoshMongo
+          if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
+              Write-Error "PoshMongo module did not load correctly."
+              exit 1
+          }
+
       - name: Process Missing Date Metrics
         id: process-metrics
         shell: pwsh
@@ -67,7 +77,8 @@ jobs:
             Write-Error "Access token is missing."
             exit 1
           }
-            
+
+          Import-Module PoshMongo
           $MissingDatesFile = "missing_dates.txt"
           if (Test-Path $MissingDatesFile) {
               $MissingDates = Get-Content $MissingDatesFile
@@ -141,6 +152,7 @@ jobs:
           Write-Host "Requesting YouTube metrics for $FormattedDate..."
 
           try {
+              Import-Module PoshMongo
               $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
                 Authorization = "Bearer $AccessToken"
                 Accept        = "application/json"
