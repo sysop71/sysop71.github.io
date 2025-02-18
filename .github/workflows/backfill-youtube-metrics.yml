@@ -42,7 +42,6 @@ jobs:
           $ClientSecret = "${{ secrets.YT_CLIENT_SECRET }}"
           $RefreshToken = "${{ env.refresh_token }}"
 
-          # Make the API request to get the access token using the refresh token
           $TokenResponse = Invoke-RestMethod -Uri "https://oauth2.googleapis.com/token" -Method Post -Body @{
               client_id     = $ClientId
               client_secret = $ClientSecret
@@ -57,51 +56,29 @@ jobs:
       - name: Install and Import PoshMongo Module
         shell: pwsh
         run: |
-            # Install the PoshMongo module from the PowerShell Gallery
-            Install-Module -Name PoshMongo -Force -Scope CurrentUser
-
-            # Import the PoshMongo module
-            Import-Module PoshMongo
-
-            # Validate that the module is loaded correctly and cmdlet exists
-            if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
-                Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
-                exit 1
-            } else {
-                Write-Host "PoshMongo module loaded successfully, and Connect-MongoDBInstance cmdlet is available."
-            }
+          Install-Module -Name PoshMongo -Force -Scope CurrentUser
+          Import-Module PoshMongo
+          if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
+              Write-Error "PoshMongo module did not load correctly."
+              exit 1
+          }
 
       - name: Collect YouTube Metrics for Backfill
         id: collect-youtube
         shell: pwsh
         run: |
-          # Get the channel ID from the repository variable
           $ChannelId = "${{ vars.CHANNEL_ID }}"
-
-          # Define the YouTube Analytics API endpoint
           $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
-
-          # Get the start date (first day of the year)
-          $StartDate = "2025-01-01"  # Adjust if the year changes dynamically
-          $EndDate = (Get-Date).ToString("yyyy-MM-dd")  # Today's date
-
-          # Retrieve the access token
+          $StartDate = "2025-01-01"
+          $EndDate = (Get-Date).ToString("yyyy-MM-dd")
           $AccessToken = "${{ env.access_token }}"
+
           if (-not $AccessToken) {
-            Write-Error "Access token is missing. Authentication failed."
+            Write-Error "Access token is missing."
             exit 1
           }
 
-          # Import the PoshMongo module
           Import-Module PoshMongo
-
-          # Validate that the module is loaded correctly and cmdlet exists
-          if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
-              Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
-              exit 1
-          }
-
-          # Connect to MongoDB once before the loop
           $MongoUri = "${{ secrets.MONGODB_URI }}"
           $MongoDbName = "metrics"
           $MongoCollection = "youtube"
@@ -110,16 +87,17 @@ jobs:
           $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
           $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
 
-          #Write-Host "MongoDB connection established and collection retrieved."
+          # Define file to log missing dates
+          $MissingDatesFile = "$env:GITHUB_WORKSPACE/missing_dates.txt"
+          if (Test-Path $MissingDatesFile) { Remove-Item $MissingDatesFile }
 
-          # Loop through each day from StartDate to EndDate and collect metrics
           $CurrentDate = [datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
           $EndDate = [datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)
 
           while ($CurrentDate -le $EndDate) {
               $FormattedDate = $CurrentDate.ToString("yyyy-MM-dd")
 
-              # Make the API request to YouTube Analytics API to get metrics for the current date
+              # API Request
               $QueryParams = @{
                 ids         = "channel==${ChannelId}"
                 startDate   = $FormattedDate
@@ -127,46 +105,65 @@ jobs:
                 metrics     = "views,estimatedMinutesWatched,likes"
               }
 
-              # Ensure proper URL encoding
               $EncodedQueryString = ($QueryParams.GetEnumerator() | ForEach-Object {
                 "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
               }) -join "&"
 
-              # Construct the final API URL
               $ApiRequestUrl = "$($ApiUrl)?$($EncodedQueryString)"
 
-              Write-Host "API Request URL: $ApiRequestUrl"  # Debugging output
-
-              # Make the API request
-              $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
-                Authorization = "Bearer $AccessToken"
-                Accept = "application/json"
-              }
-
-              # Map the columns to the corresponding values in the rows
-              $ColumnHeaders = $Response.columnHeaders
-              $RowData = @()
-              foreach ($Row in $Response.rows) {
-                  $MappedRow = @{ }
-                  for ($i = 0; $i -lt $Row.Count; $i++) {
-                      $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+              Write-Host "Requesting YouTube metrics for $FormattedDate..."
+              try {
+                  $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
+                    Authorization = "Bearer $AccessToken"
+                    Accept = "application/json"
                   }
-                  $RowData += $MappedRow
+
+                  # Check if there are any metric rows
+                  if ($Response.rows.Count -eq 0) {
+                      Add-Content -Path $MissingDatesFile -Value $FormattedDate
+                      Write-Host "No metrics for $FormattedDate. Logged as missing."
+                  } else {
+                      $ColumnHeaders = $Response.columnHeaders
+                      $RowData = @()
+                      foreach ($Row in $Response.rows) {
+                          $MappedRow = @{ }
+                          for ($i = 0; $i -lt $Row.Count; $i++) {
+                              $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+                          }
+                          $RowData += $MappedRow
+                      }
+
+                      $Data = @{
+                          date    = $FormattedDate
+                          metrics = $RowData
+                      }
+
+                      $Collection.InsertOne($Data)
+                      Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
+                  }
+              }
+              catch {
+                  Write-Host "API request failed for $FormattedDate: $_"
               }
 
-              # Format data for MongoDB insertion (without platform field)
-              $Data = @{
-                  date       = $FormattedDate
-                  metrics    = $RowData
-              }
-
-              # Insert the data into MongoDB
-              $Collection.InsertOne($Data)
-
-              Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
-
-              # Move to the next day
               $CurrentDate = $CurrentDate.AddDays(1)
+          }
+
+          Write-Host "Missing dates file created at: $MissingDatesFile"
+
+      - name: Commit missing dates file if needed
+        shell: pwsh
+        run: |
+          $MissingDatesFile = "$env:GITHUB_WORKSPACE/missing_dates.txt"
+          if (Test-Path $MissingDatesFile) {
+              Write-Host "Committing missing dates file to repository..."
+              git config --global user.name "github-actions"
+              git config --global user.email "github-actions@github.com"
+              git add missing_dates.txt
+              git commit -m "Add missing YouTube metric dates"
+              git push
+          } else {
+              Write-Host "No missing dates detected, skipping commit."
           }
 
       - name: Output result
