@@ -57,11 +57,19 @@ jobs:
       - name: Install MongoDB.Driver using NuGet
         shell: pwsh
         run: |
-          # Install the MongoDB driver with NuGet (version 3.2.0)
-          nuget install MongoDB.Driver -Version 3.2.0 -OutputDirectory "./packages"
+            # Install MongoDB.Driver using NuGet (version 3.2.0)
+            nuget install MongoDB.Driver -Version 3.2.0 -OutputDirectory "./packages"
 
-          # Import MongoDB driver assembly
-          Add-Type -Path "./packages/MongoDB.Driver.3.2.0/lib/netstandard2.0/MongoDB.Driver.dll"
+            # Find the MongoDB.Driver.dll file within the packages directory
+            $MongoDriverPath = Get-ChildItem -Path "./packages" -Recurse -Filter "MongoDB.Driver.dll" | Select-Object -First 1
+
+            if ($MongoDriverPath) {
+                Write-Host "MongoDB.Driver.dll found at $($MongoDriverPath.FullName)"
+                Add-Type -Path $MongoDriverPath.FullName
+            } else {
+                Write-Error "MongoDB.Driver.dll not found in the packages directory."
+                exit 1
+            }
 
       - name: Collect YouTube Metrics for Backfill
         id: collect-youtube
