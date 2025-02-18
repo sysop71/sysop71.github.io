@@ -61,14 +61,13 @@ jobs:
             Install-Module -Name PoshMongo -Force -Scope CurrentUser
 
             # Import the PoshMongo module
-            Import-Module PoshMongo -verbose
+            Import-Module PoshMongo
 
             # Validate that the module is loaded correctly and cmdlet exists
             if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
                 Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
                 exit 1
             } else {
-                Get-Command -Module PoshMongo
                 Write-Host "PoshMongo module loaded successfully, and Connect-MongoDBInstance cmdlet is available."
             }
 
@@ -86,15 +85,36 @@ jobs:
           $StartDate = "2025-01-01"  # Adjust if the year changes dynamically
           $EndDate = (Get-Date).ToString("yyyy-MM-dd")  # Today's date
 
-          # Loop through each day from StartDate to EndDate and collect metrics
-          $CurrentDate = [datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
-          $EndDate = [datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)
-
-          $AccessToken = "${{ env.access_token }}"  # ✅ Retrieve access token from env
+          # Retrieve the access token
+          $AccessToken = "${{ env.access_token }}"
           if (-not $AccessToken) {
             Write-Error "Access token is missing. Authentication failed."
             exit 1
           }
+
+          # Import the PoshMongo module
+          Import-Module PoshMongo
+
+          # Validate that the module is loaded correctly and cmdlet exists
+          if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
+              Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
+              exit 1
+          }
+
+          # Connect to MongoDB once before the loop
+          $MongoUri = "${{ secrets.MONGODB_URI }}"
+          $MongoDbName = "metrics"
+          $MongoCollection = "youtube"
+
+          $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
+          $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
+          $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
+
+          Write-Host "MongoDB connection established and collection retrieved."
+
+          # Loop through each day from StartDate to EndDate and collect metrics
+          $CurrentDate = [datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
+          $EndDate = [datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)
 
           while ($CurrentDate -le $EndDate) {
               $FormattedDate = $CurrentDate.ToString("yyyy-MM-dd")
@@ -139,26 +159,6 @@ jobs:
                   date       = $FormattedDate
                   metrics    = $RowData
               }
-
-              # Import the PoshMongo module
-              Import-Module PoshMongo -verbose
-
-              # Validate that the module is loaded correctly and cmdlet exists
-              if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
-                  Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
-                  exit 1
-              }
-              # MongoDB URI and Collection information
-              $MongoUri = "${{ secrets.MONGODB_URI }}"
-              $MongoDbName = "metrics"
-              $MongoCollection = "youtube"
-
-              # Connect to MongoDB using the Connect-MongoDBInstance cmdlet from PoshMongo
-              $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
-
-              # Retrieve the database and collection
-              $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
-              $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
 
               # Insert the data into MongoDB
               $Collection.InsertOne($Data)
