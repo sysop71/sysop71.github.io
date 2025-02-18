@@ -31,8 +31,8 @@ jobs:
               Write-Error "Failed to retrieve the refresh token from Azure Key Vault."
               exit 1
           }
-          Write-Host "Refresh token retrieved successfully, but will not be logged."
-          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Refresh token retrieved successfully"
+          echo "refresh_token=$RefreshToken" >> $GITHUB_ENV
 
       - name: Get YouTube Access Token using Refresh Token
         id: get-access-token
@@ -51,8 +51,8 @@ jobs:
           } -ContentType "application/x-www-form-urlencoded"
 
           $AccessToken = $TokenResponse.access_token
-          Write-Host "Access token retrieved successfully, but will not be logged."
-          Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+          Write-Host "Access token retrieved successfully"
+          echo "access_token=$AccessToken" >> $GITHUB_ENV
 
       - name: Install and Import PoshMongo Module
         shell: pwsh
