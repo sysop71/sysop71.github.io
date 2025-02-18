@@ -1,0 +1,85 @@
+name: Renew YouTube Refresh Token
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Run daily at midnight
+  workflow_dispatch:  # Allows manual trigger
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  renew-token:
+    runs-on: windows-latest # Use Windows for PowerShell compatibility
+
+    steps:
+      # Step 1: Authenticate with Azure
+      - name: Authenticate to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 2: Retrieve Existing Token from Azure Key Vault
+      - name: Retrieve Existing Token from Azure Key Vault
+        id: get-token
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "YouTube-RefreshToken"
+          $RefreshToken = az keyvault secret show --vault-name $KeyVaultName --name $SecretName --query value -o tsv
+          if (-not $RefreshToken) {
+              Write-Error "Failed to retrieve the refresh token from Azure Key Vault."
+              exit 1
+          }
+          Write-Host "Refresh token retrieved successfully."
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      # Step 3: Renew the Refresh Token
+      - name: Renew the Refresh Token
+        id: renew-token
+        shell: pwsh
+        run: |
+          $ClientId = "${{ secrets.YT_CLIENT_ID }}"
+          $ClientSecret = "${{ secrets.YT_CLIENT_SECRET }}"
+          $RefreshToken = "${{ env.refresh_token }}"
+
+          # Request a new access token from Google OAuth
+          try {
+              $TokenResponse = Invoke-RestMethod -Uri "https://oauth2.googleapis.com/token" -Method Post -Body @{
+                  client_id     = $ClientId
+                  client_secret = $ClientSecret
+                  refresh_token = $RefreshToken
+                  grant_type    = "refresh_token"
+              } -ContentType "application/x-www-form-urlencoded"
+
+              $NewAccessToken = $TokenResponse.access_token
+              $NewRefreshToken = $TokenResponse.refresh_token
+
+              if (-not $NewAccessToken) {
+                  throw "Failed to retrieve new access token from Google OAuth."
+              }
+
+              # Google may or may not return a new refresh token
+              if (-not $NewRefreshToken) {
+                  Write-Host "Google did not return a new refresh token, using the existing one."
+                  $NewRefreshToken = $RefreshToken
+              }
+
+              Write-Host "New refresh token retrieved successfully."
+              Write-Output "new_refresh_token=$NewRefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
+          } catch {
+              Write-Error "An error occurred while renewing the token: $_"
+              exit 1
+          }
+
+      # Step 4: Update the Token in Azure Key Vault
+      - name: Update Token in Azure Key Vault
+        shell: pwsh
+        run: |
+          $KeyVaultName = "${{ secrets.AZURE_KEYVAULT_NAME }}"
+          $SecretName = "YouTube-RefreshToken"
+          $NewRefreshToken = "${{ env.new_refresh_token }}"
+
+          az keyvault secret set --vault-name $KeyVaultName --name $SecretName --value $NewRefreshToken
+          Write-Host "Refresh token successfully updated in Azure Key Vault."
