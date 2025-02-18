@@ -157,8 +157,8 @@ jobs:
               $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
 
               # Retrieve the database and collection
-              $Database = $MongoClient.GetDatabase($MongoDbName)
-              $Collection = $Database.GetCollection($MongoCollection)
+              $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
+              $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
 
               # Insert the data into MongoDB
               $Collection.InsertOne($Data)
