@@ -54,22 +54,22 @@ jobs:
           Write-Host "Access token retrieved successfully."
           Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Install MongoDB.Driver using NuGet
+      - name: Install and Import PoshMongo Module
         shell: pwsh
         run: |
-            # Install MongoDB.Driver using NuGet (version 3.2.0)
-            nuget install MongoDB.Driver -Version 3.2.0 -OutputDirectory "./packages"
+          # Install the PoshMongo module from the PowerShell Gallery
+          Install-Module -Name PoshMongo -Force -Scope CurrentUser
 
-            # Find the MongoDB.Driver.dll file within the packages directory
-            $MongoDriverPath = Get-ChildItem -Path "./packages" -Recurse -Filter "MongoDB.Driver.dll" | Select-Object -First 1
+          # Import the PoshMongo module
+          Import-Module PoshMongo
 
-            if ($MongoDriverPath) {
-                Write-Host "MongoDB.Driver.dll found at $($MongoDriverPath.FullName)"
-                Add-Type -Path $MongoDriverPath.FullName
-            } else {
-                Write-Error "MongoDB.Driver.dll not found in the packages directory."
-                exit 1
-            }
+          # Validate that the module is loaded correctly
+          if (-not (Get-Command -Name 'Connect-MongoDBInstance')) {
+              Write-Error "PoshMongo module did not load correctly."
+              exit 1
+          } else {
+              Write-Host "PoshMongo module loaded successfully."
+          }
 
       - name: Collect YouTube Metrics for Backfill
         id: collect-youtube
@@ -139,15 +139,19 @@ jobs:
                   metrics    = $RowData
               }
 
-              # Insert the data into MongoDB
+              # MongoDB URI and Collection information
               $MongoUri = "${{ secrets.MONGODB_URI }}"
               $MongoDbName = "metrics"
               $MongoCollection = "youtube"
 
-              # Connect to MongoDB and insert the data
-              $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
+              # Connect to MongoDB using the Connect-MongoDBInstance cmdlet from PoshMongo
+              $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
+
+              # Retrieve the database and collection
               $Database = $MongoClient.GetDatabase($MongoDbName)
-              $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+              $Collection = $Database.GetCollection($MongoCollection)
+
+              # Insert the data into MongoDB
               $Collection.InsertOne($Data)
 
               Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
