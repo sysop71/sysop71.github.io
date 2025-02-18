@@ -155,7 +155,6 @@ jobs:
 
               # Connect to MongoDB using the Connect-MongoDBInstance cmdlet from PoshMongo
               $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
-              $MongoClient = Connect-MongoDBInstance -ConnectionString
 
               # Retrieve the database and collection
               $Database = $MongoClient.GetDatabase($MongoDbName)
