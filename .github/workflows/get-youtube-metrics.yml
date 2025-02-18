@@ -105,9 +105,9 @@ jobs:
                       $MongoUri = "${{ secrets.MONGODB_URI }}"
                       $MongoDbName = "metrics"
                       $MongoCollection = "youtube"
-                      $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
-                      $Database = $MongoClient.GetDatabase($MongoDbName)
-                      $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+                      $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
+                      $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
+                      $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
                       $Collection.InsertOne($Data)
                       Write-Host "Metrics for $Date inserted into MongoDB."
                   } else {
@@ -173,9 +173,9 @@ jobs:
                   $MongoUri = "${{ secrets.MONGODB_URI }}"
                   $MongoDbName = "metrics"
                   $MongoCollection = "youtube"
-                  $MongoClient = New-Object MongoDB.Driver.MongoClient($MongoUri)
-                  $Database = $MongoClient.GetDatabase($MongoDbName)
-                  $Collection = $Database.GetCollection[PSObject]($MongoCollection)
+                  $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
+                  $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
+                  $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
                   $Collection.InsertOne($Data)
                   Write-Host "Metrics for $FormattedDate inserted into MongoDB."
               } else {
