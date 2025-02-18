@@ -112,6 +112,9 @@ jobs:
 
           Write-Host "MongoDB connection established and collection retrieved."
 
+          # Initialize a list to track missing dates
+          $MissingDates = @()
+
           # Loop through each day from StartDate to EndDate and collect metrics
           $CurrentDate = [datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
           $EndDate = [datetime]::ParseExact($EndDate, "yyyy-MM-dd", $null)
@@ -143,30 +146,56 @@ jobs:
                 Accept = "application/json"
               }
 
-              # Map the columns to the corresponding values in the rows
-              $ColumnHeaders = $Response.columnHeaders
-              $RowData = @()
-              foreach ($Row in $Response.rows) {
-                  $MappedRow = @{ }
-                  for ($i = 0; $i -lt $Row.Count; $i++) {
-                      $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+              if (-not $Response.rows) {
+                  Write-Host "No data available for $FormattedDate"
+                  $MissingDates += $FormattedDate  # Log missing date
+              } else {
+                  # Map the columns to the corresponding values in the rows
+                  $ColumnHeaders = $Response.columnHeaders
+                  $RowData = @()
+                  foreach ($Row in $Response.rows) {
+                      $MappedRow = @{ }
+                      for ($i = 0; $i -lt $Row.Count; $i++) {
+                          $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
+                      }
+                      $RowData += $MappedRow
                   }
-                  $RowData += $MappedRow
+
+                  # Format data for MongoDB insertion (without platform field)
+                  $Data = @{
+                      date       = $FormattedDate
+                      metrics    = $RowData
+                  }
+
+                  # Insert the data into MongoDB
+                  $Collection.InsertOne($Data)
+
+                  Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
               }
-
-              # Format data for MongoDB insertion (without platform field)
-              $Data = @{
-                  date       = $FormattedDate
-                  metrics    = $RowData
-              }
-
-              # Insert the data into MongoDB
-              $Collection.InsertOne($Data)
-
-              Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
 
               # Move to the next day
               $CurrentDate = $CurrentDate.AddDays(1)
+          }
+
+          # If there are missing dates, log them to a file
+          if ($MissingDates.Count -gt 0) {
+              $MissingDates | Out-File -FilePath "missing_metrics.txt"
+              Write-Host "Missing metrics for the following dates: $($MissingDates -join ', ')"
+          }
+
+      - name: Commit missing metrics file
+        shell: pwsh
+        run: |
+          # Check if the missing_metrics.txt file exists
+          if (Test-Path "missing_metrics.txt") {
+              Write-Host "Committing missing metrics file."
+              git config --global user.name "github-actions"
+              git config --global user.email "github-actions@github.com"
+              git add missing_metrics.txt
+              git commit -m "Add missing metrics for backfill"
+              git push
+          } else {
+              Write-Host "No missing metrics file to commit."
           }
 
       - name: Output result
