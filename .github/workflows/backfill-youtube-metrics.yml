@@ -110,7 +110,7 @@ jobs:
           $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
           $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
 
-          Write-Host "MongoDB connection established and collection retrieved."
+          #Write-Host "MongoDB connection established and collection retrieved."
 
           # Loop through each day from StartDate to EndDate and collect metrics
           $CurrentDate = [datetime]::ParseExact($StartDate, "yyyy-MM-dd", $null)
