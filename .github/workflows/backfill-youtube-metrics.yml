@@ -61,16 +61,17 @@ jobs:
             Install-Module -Name PoshMongo -Force -Scope CurrentUser
 
             # Import the PoshMongo module
-            Import-Module PoshMongo
+            Import-Module PoshMongo -verbose
 
             # Validate that the module is loaded correctly and cmdlet exists
             if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
                 Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
                 exit 1
             } else {
+                Get-Command -Module PoshMongo
                 Write-Host "PoshMongo module loaded successfully, and Connect-MongoDBInstance cmdlet is available."
             }
-                
+
       - name: Collect YouTube Metrics for Backfill
         id: collect-youtube
         shell: pwsh
