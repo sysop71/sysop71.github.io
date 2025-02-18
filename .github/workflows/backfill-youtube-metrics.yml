@@ -140,6 +140,14 @@ jobs:
                   metrics    = $RowData
               }
 
+              # Import the PoshMongo module
+              Import-Module PoshMongo -verbose
+
+              # Validate that the module is loaded correctly and cmdlet exists
+              if (-not (Get-Command -Name 'Connect-MongoDBInstance' -ErrorAction SilentlyContinue)) {
+                  Write-Error "PoshMongo module did not load correctly or Connect-MongoDBInstance cmdlet is not available."
+                  exit 1
+              }
               # MongoDB URI and Collection information
               $MongoUri = "${{ secrets.MONGODB_URI }}"
               $MongoDbName = "metrics"
