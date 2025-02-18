@@ -1,7 +1,7 @@
 name: YouTube Backfill Metrics
 
 on:
-  workflow_dispatch:  # Manually triggered from the UI
+  workflow_dispatch:
 
 env:
   ACTIONS_RUNNER_DEBUG: false
@@ -9,7 +9,7 @@ env:
 
 jobs:
   backfill-youtube-metrics:
-    runs-on: windows-latest  # Use Windows for PowerShell compatibility
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -32,7 +32,7 @@ jobs:
               exit 1
           }
           Write-Host "Refresh token retrieved successfully"
-          echo "refresh_token=$RefreshToken" >> $GITHUB_ENV
+          Write-Output "refresh_token=$RefreshToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Get YouTube Access Token using Refresh Token
         id: get-access-token
@@ -52,7 +52,7 @@ jobs:
 
           $AccessToken = $TokenResponse.access_token
           Write-Host "Access token retrieved successfully"
-          echo "access_token=$AccessToken" >> $GITHUB_ENV
+          Write-Output "access_token=$AccessToken" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Install and Import PoshMongo Module
         shell: pwsh
