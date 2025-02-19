@@ -147,8 +147,8 @@ jobs:
                       $MissingDates += $FormattedDate
                   }
               } catch {
-                  Write-Host "API request failed for $FormattedDate. Error: $($_.Exception.Message)"
                   $MissingDates += $FormattedDate
+                  throw "API request failed for $FormattedDate. Error: $($_.Exception.Message)"
               }
           }
 
