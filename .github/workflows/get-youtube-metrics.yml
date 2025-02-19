@@ -65,8 +65,8 @@ jobs:
               exit 1
           }
 
-      - name: Process Missing Date Metrics
-        id: process-metrics
+      - name: Collect YouTube Metrics
+        id: collect-metrics
         shell: pwsh
         run: |
           $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
@@ -78,30 +78,62 @@ jobs:
             exit 1
           }
 
-          Import-Module PoshMongo
+          # Read missing dates from file
           $MissingDatesFile = "missing_dates.txt"
+          $DatesToQuery = @()
           if (Test-Path $MissingDatesFile) {
-              $MissingDates = Get-Content $MissingDatesFile
-              $NewMissingDates = @()
-              foreach ($Date in $MissingDates) {
-                  $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
-                  $Response = Invoke-RestMethod -Uri $ApiUrl -Method Get -Headers @{Authorization = "Bearer $AccessToken"} -Body @{
-                      "ids"            = "channel==${{ vars.CHANNEL_ID }}"
-                      "startDate"      = $Date
-                      "endDate"        = $Date
-                      "metrics"        = "views,estimatedMinutesWatched,likes"
-                  } -ContentType "application/json"
+              $DatesToQuery = Get-Content $MissingDatesFile | Where-Object { $_ -match "^\d{4}-\d{2}-\d{2}$" }
+          }
+
+          # Always include yesterday's date
+          $Yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
+          if ($Yesterday -notin $DatesToQuery) {
+              $DatesToQuery += $Yesterday
+          }
+
+          $MissingDates = @()
+
+          foreach ($FormattedDate in $DatesToQuery) {
+              Write-Host "Requesting YouTube metrics for $FormattedDate..."
+
+              # Construct Query Parameters
+              $QueryParams = @{
+                ids       = "channel==$ChannelId"
+                startDate = $FormattedDate
+                endDate   = $FormattedDate
+                metrics   = "views,estimatedMinutesWatched,likes"
+              }
+
+              # Encode Query String
+              $EncodedQueryString = ($QueryParams.GetEnumerator() | ForEach-Object {
+                "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
+              }) -join "&"
+
+              $ApiRequestUrl = "$($ApiUrl)?$($EncodedQueryString)"
+
+              try {
+                  Import-Module PoshMongo
+                  $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
+                    Authorization = "Bearer $AccessToken"
+                    Accept        = "application/json"
+                  }
+
                   if ($Response.rows.Count -gt 0) {
                       $ColumnHeaders = $Response.columnHeaders
                       $RowData = @()
                       foreach ($Row in $Response.rows) {
-                          $MappedRow = @{}
+                          $MappedRow = @{ }
                           for ($i = 0; $i -lt $Row.Count; $i++) {
                               $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
                           }
                           $RowData += $MappedRow
                       }
-                      $Data = @{ date = $Date; metrics = $RowData }
+
+                      $Data = @{
+                          date    = $FormattedDate
+                          metrics = $RowData
+                      }
+
                       $MongoUri = "${{ secrets.MONGODB_URI }}"
                       $MongoDbName = "metrics"
                       $MongoCollection = "youtube"
@@ -109,79 +141,34 @@ jobs:
                       $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
                       $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
                       $Collection.InsertOne($Data)
-                      Write-Host "Metrics for $Date inserted into MongoDB."
+                      Write-Host "Metrics for $FormattedDate inserted into MongoDB."
                   } else {
-                      $NewMissingDates += $Date
+                      Write-Host "No metrics data found for $FormattedDate. Adding to missing dates."
+                      $MissingDates += $FormattedDate
                   }
-              }
-              if ($NewMissingDates.Count -eq 0) {
-                  Remove-Item $MissingDatesFile
-              } else {
-                  $NewMissingDates | Set-Content $MissingDatesFile
+              } catch {
+                  Write-Error "Failed to retrieve YouTube metrics for $FormattedDate: $_"
+                  $MissingDates += $FormattedDate
               }
           }
 
-      - name: Collect YouTube Metrics
-        id: collect-metrics
+          if ($MissingDates.Count -gt 0) {
+              Set-Content -Path $MissingDatesFile -Value ($MissingDates -join "`n")
+              Write-Host "Updated missing_dates.txt with new missing dates."
+          }
+
+  commit-missing-dates:
+    runs-on: windows-latest
+    needs: collect-youtube-metrics
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Commit and push missing dates file
         shell: pwsh
         run: |
-          $ApiUrl = "https://youtubeanalytics.googleapis.com/v2/reports"
-          $ChannelId = "${{ vars.CHANNEL_ID }}"
-          $FormattedDate = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
-          $AccessToken = "${{ env.access_token }}"
-
-          if (-not $AccessToken) {
-            Write-Error "Access token is missing."
-            exit 1
-          }
-
-          # Construct Query Parameters
-          $QueryParams = @{
-            ids       = "channel==$ChannelId"
-            startDate = $FormattedDate
-            endDate   = $FormattedDate
-            metrics   = "views,estimatedMinutesWatched,likes"
-          }
-
-          # Encode Query String
-          $EncodedQueryString = ($QueryParams.GetEnumerator() | ForEach-Object {
-            "$([System.Web.HttpUtility]::UrlEncode($_.Key))=$([System.Web.HttpUtility]::UrlEncode($_.Value))"
-          }) -join "&"
-
-          $ApiRequestUrl = "$($ApiUrl)?$($EncodedQueryString)"
-          Write-Host "Requesting YouTube metrics for $FormattedDate..."
-
-          try {
-              Import-Module PoshMongo
-              $Response = Invoke-RestMethod -Uri $ApiRequestUrl -Method Get -Headers @{
-                Authorization = "Bearer $AccessToken"
-                Accept        = "application/json"
-              }
-
-              if ($Response.rows.Count -gt 0) {
-                  $ColumnHeaders = $Response.columnHeaders
-                  $RowData = @()
-                  foreach ($Row in $Response.rows) {
-                      $MappedRow = @{}
-                      for ($i = 0; $i -lt $Row.Count; $i++) {
-                          $MappedRow[$ColumnHeaders[$i].name] = $Row[$i]
-                      }
-                      $RowData += $MappedRow
-                  }
-
-                  $Data = @{ date = $FormattedDate; metrics = $RowData }
-                  $MongoUri = "${{ secrets.MONGODB_URI }}"
-                  $MongoDbName = "metrics"
-                  $MongoCollection = "youtube"
-                  $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
-                  $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
-                  $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
-                  $Collection.InsertOne($Data)
-                  Write-Host "Metrics for $FormattedDate inserted into MongoDB."
-              } else {
-                  Write-Host "No metrics data found for $FormattedDate."
-              }
-          } catch {
-              Write-Error "Failed to retrieve YouTube metrics: $_"
-              exit 1
-          }
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+          git add missing_dates.txt
+          git commit -m "Updated missing dates"
+          git push
