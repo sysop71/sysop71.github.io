@@ -132,7 +132,7 @@ jobs:
                       $Data = @{
                           date    = $FormattedDate
                           metrics = $RowData
-                      }
+                      } |ConvertFrom-Json -Depth 99 -Compress
 
                       $MongoUri = "${{ secrets.MONGODB_URI }}"
                       $MongoDbName = "metrics"
@@ -140,7 +140,8 @@ jobs:
                       $MongoClient = Connect-MongoDBInstance -ConnectionString $MongoUri
                       $Database = Get-MongoDBDatabase -DatabaseName $MongoDbName
                       $Collection = Get-MongoDBCollection -CollectionName $MongoCollection -MongoDatabase $Database
-                      $Collection.InsertOne($Data)
+                      #$Collection.InsertOne($Data)
+                      Add-MongoDBDocument -Document $Data -MongoCollection $Collection
                       Write-Host "Metrics for $FormattedDate inserted into MongoDB."
                   } else {
                       Write-Host "No metrics data found for $FormattedDate. Adding to missing dates."

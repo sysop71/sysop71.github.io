@@ -136,9 +136,10 @@ jobs:
                       $Data = @{
                           date    = $FormattedDate
                           metrics = $RowData
-                      }
+                      } |ConvertFrom-Json -Depth 99 -Compress
 
-                      $Collection.InsertOne($Data)
+                      #$Collection.InsertOne($Data)
+                      Add-MongoDBDocument -Document $Data -MongoCollection $Collection
                       Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
                   }
               }
