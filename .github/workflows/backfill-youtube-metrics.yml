@@ -138,16 +138,21 @@ jobs:
                           metrics = $RowData
                       }
 
-                      # Convert the data to JSON properly
-                      $JsonData = $Data | ConvertTo-Json -Depth 10 -Compress
+                        # Add an `_id` field explicitly if it doesn't exist
+                        if (-not $Data.ContainsKey("_id")) {
+                            $Data["_id"] = [guid]::NewGuid().ToString()
+                        }
 
-                      # Ensure no extra characters or formatting issues
-                      if (-not ($JsonData -match "^\{.*\}$")) {
-                          throw "Generated JSON is not valid: $JsonData"
-                      }
+                        # Convert to JSON properly
+                        $JsonData = $Data | ConvertTo-Json -Depth 10 -Compress
 
-                      # Insert into MongoDB
-                      Add-MongoDBDocument -MongoCollection $Collection -Document $JsonData
+                        # Validate JSON format
+                        if (-not ($JsonData -match "^\{.*\}$")) {
+                            throw "Generated JSON is not valid: $JsonData"
+                        }
+
+                        # Insert into MongoDB
+                        Add-MongoDBDocument -Collection $Collection -Document $JsonData
                       Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
                   }
               }

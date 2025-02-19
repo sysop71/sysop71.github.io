@@ -134,6 +134,11 @@ jobs:
                           metrics = $RowData
                       }
 
+                      # Add an `_id` field explicitly if it doesn't exist
+                      if (-not $Data.ContainsKey("_id")) {
+                          $Data["_id"] = [guid]::NewGuid().ToString()
+                      }
+
                       $MongoUri = "${{ secrets.MONGODB_URI }}"
                       $MongoDbName = "metrics"
                       $MongoCollection = "youtube"
