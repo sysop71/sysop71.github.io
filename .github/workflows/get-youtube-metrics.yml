@@ -132,7 +132,7 @@ jobs:
                       $Data = @{
                           date    = $FormattedDate
                           metrics = $RowData
-                      } |ConvertFrom-Json -Depth 99 -Compress
+                      } |ConvertFrom-Json -Depth 99 |ConvertTo-Json -Compress
 
                       $MongoUri = "${{ secrets.MONGODB_URI }}"
                       $MongoDbName = "metrics"
