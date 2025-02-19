@@ -149,7 +149,7 @@ jobs:
                       }
 
                       # Insert into MongoDB
-                      Add-MongoDBDocument -Collection $Collection -Document $JsonData
+                      Add-MongoDBDocument -MongoCollection $Collection -Document $JsonData
                       Write-Host "Metrics for $FormattedDate inserted into MongoDB."
                   } else {
                       Write-Host "No metrics data found for $FormattedDate. Adding to missing dates."

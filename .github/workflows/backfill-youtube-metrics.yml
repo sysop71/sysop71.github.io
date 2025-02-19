@@ -147,7 +147,7 @@ jobs:
                       }
 
                       # Insert into MongoDB
-                      Add-MongoDBDocument -Collection $Collection -Document $JsonData
+                      Add-MongoDBDocument -MongoCollection $Collection -Document $JsonData
                       Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
                   }
               }
