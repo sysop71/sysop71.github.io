@@ -136,10 +136,18 @@ jobs:
                       $Data = @{
                           date    = $FormattedDate
                           metrics = $RowData
-                      } |ConvertFrom-Json -Depth 99 |ConvertTo-Json -Compress
+                      }
 
-                      #$Collection.InsertOne($Data)
-                      Add-MongoDBDocument -Document $Data -MongoCollection $Collection
+                      # Convert the data to JSON properly
+                      $JsonData = $Data | ConvertTo-Json -Depth 10 -Compress
+
+                      # Ensure no extra characters or formatting issues
+                      if (-not ($JsonData -match "^\{.*\}$")) {
+                          throw "Generated JSON is not valid: $JsonData"
+                      }
+
+                      # Insert into MongoDB
+                      Add-MongoDBDocument -Collection $Collection -Document $JsonData
                       Write-Host "YouTube metrics for $FormattedDate inserted into MongoDB successfully."
                   }
               }
