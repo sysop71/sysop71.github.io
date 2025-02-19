@@ -147,7 +147,7 @@ jobs:
                       $MissingDates += $FormattedDate
                   }
               } catch {
-                  Write-Error "Failed to retrieve YouTube metrics for $FormattedDate: $_"
+                  Write-Host "API request failed for $FormattedDate. Error: $($_.Exception.Message)"
                   $MissingDates += $FormattedDate
               }
           }
