@@ -5,7 +5,7 @@ author:
 
 description: >-
   Your go-to hub for gaming streams, e-sports highlights, and personal tech insights.
-baseurl: "https://sysop71.com"
+url: "https://sysop71.com"
 
 # Build settings
 markdown: kramdown
