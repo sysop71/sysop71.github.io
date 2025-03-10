@@ -1,17 +1,11 @@
 title: sysop71.com
-description: >-
-  Your go-to hub for gaming streams, e-sports highlights, and personal tech insights.
-url: "https://sysop71.com"
 author:
   name: "sysop71#1297"
   email: gamer@sysop71.com
 
-google_analytics: G-8CXKYEE42R
-
-show_excerpts: true
-
-paginate: 5
-paginate_path: /posts/page:num
+description: >-
+  Your go-to hub for gaming streams, e-sports highlights, and personal tech insights.
+baseurl: "https://sysop71.com"
 
 # Build settings
 markdown: kramdown
@@ -34,6 +28,7 @@ collections:
 
 minima:
   skin: dark
+  show_excerpts: true
   nav_pages:
     - posts.md
     - tournaments.md
@@ -63,6 +58,11 @@ minima:
 # Disqus Comments
 disqus:
     shortname: https-sysop71-com
+
+google_analytics: G-8CXKYEE42R
+
+paginate: 5
+paginate_path: /posts/page:num
 
 plugins:
   - jekyll-feed
