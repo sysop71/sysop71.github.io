@@ -13,13 +13,6 @@ show_excerpts: true
 paginate: 5
 paginate_path: /posts/page:num
 
-header_pages:
- - posts.md
- - tournaments.md
- - calendar.md
- - streaming.md
- - about.md
-
 # Build settings
 markdown: kramdown
 remote_theme: jekyll/minima
@@ -41,6 +34,12 @@ collections:
 
 minima:
   skin: dark
+  nav_pages:
+    - posts.md
+    - tournaments.md
+    - calendar.md
+    - streaming.md
+    - about.md
   social_links:
     - title: My TikTok clips
       icon: tiktok
