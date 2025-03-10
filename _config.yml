@@ -38,8 +38,8 @@ header_pages:
 
 # Build settings
 markdown: kramdown
-remote_theme: jekyll/minima
-#theme: minima
+#remote_theme: jekyll/minima
+theme: minima
 
 collections:
   tournaments:
@@ -58,24 +58,24 @@ collections:
 minima:
   skin: dark
   social_links:
-    - platform: tiktok
-      user_url: "https://www.tiktok.com/@sysop71"
-      title: My TikTok clips
-    - platform: discord
-      user_url: "https://discord.gg/BYAjAqXEpp"
-      title: Wave Hello
-    - platform: instagram
-      user_url: "https://www.instagram.com/sysop71/"
-      title: My Instagram feed
-    - platform: twitch
-      user_url: "https://twitch.tv/sysop71"
-      title: Watch my stream
-    - platform: youtube
-      user_url: "https://www.youtube.com/@sysop71"
-      title: My YouTube channel
-    - platform: bsky
-      user_url: "https://bsky.app/profile/sysop71.bsky.social"
-      title: Come chat with me
+    - title: My TikTok clips
+      icon: tiktok
+      url: "https://www.tiktok.com/@sysop71"
+    - title: Wave Hello
+      icon: discord
+      url: "https://discord.gg/BYAjAqXEpp"
+    - title: My Instagram feed
+      icon: instagram
+      url: "https://www.instagram.com/sysop71/"
+    - title: Watch my stream
+      icon: twitch
+      url: "https://twitch.tv/sysop71"
+    - title: My YouTube channel
+      icon: youtube
+      url: "https://www.youtube.com/@sysop71"
+    - title: Come chat with me
+      icon: bluesky
+      url: "https://bsky.app/profile/sysop71.bsky.social"
 
 
 #remote_theme: pages-themes/midnight@v0.2.0
