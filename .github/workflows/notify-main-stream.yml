@@ -1,0 +1,28 @@
+name: Announce Long-Term World Stream
+
+on:
+  schedule:
+    - cron: "30 16 * * 3,5"  # 11:30 AM CST on Wed/Fri
+  workflow_dispatch:
+
+env:
+  ACTIONS_RUNNER_DEBUG: true
+  ACTIONS_STEP_DEBUG: true
+
+jobs:
+  send_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Bluesky
+        uses: mod-posh/Post2BlueSky@v0.0.3.0
+        with:
+          Message: "Live at noon CST with long-term Minecraft progress. Let's build something epic: [twitch.tv/sysop71](https://twitch.tv/sysop71) #MinecraftSurvival #LongTermWorld #StreamWithMe #BuildingMinecraft #TwitchStreamer"
+          verbose: "verbose"
+          bluesky_api_key: ${{ secrets.bluesky_api_key }}
+          bluesky_identifier: ${{ secrets.bluesky_identifier }}
+
+      - name: Post to Discord
+        uses: mod-posh/Post2Discord@v0.0.3.2
+        with:
+          message: "Streaming long-term Minecraft world today at 12:00 PM CST: [twitch.tv/sysop71](https://twitch.tv/sysop71)"
+          discordWebhook: ${{ secrets.SYSOP71_DISCORD_WEBHOOK }}
