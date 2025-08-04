@@ -2,7 +2,7 @@ name: Update Twitch Stream for Minecraft
 
 on:
   schedule:
-    - cron: "30 13 * * 1-5"  # Run at 7:30 AM CST (13:30 UTC), Mon-Fri
+    - cron: "30 11 * * 1-5"  # Run at 7:30 AM CST (13:30 UTC), Mon-Fri
   workflow_dispatch:  # Manual trigger
 
 env:
