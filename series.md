@@ -15,7 +15,9 @@ Watch the action live or catch up with the edited YouTube episodes below.
 ## 🗓 Streaming Schedule
 
 **🟣 Twitch**: [twitch.tv/sysop71](https://twitch.tv/sysop71)
+
 **📅 When**: Wednesdays & Fridays from **12:00–3:00 PM CST**
+
 **📘 Full Calendar**: [sysop71.com/calendar](https://sysop71.com/calendar/)
 
 **📺 YouTube Episodes**: [youtube.com/@sysop71](https://youtube.com/@sysop71) – Edited and uploaded after each stream
