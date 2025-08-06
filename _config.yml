@@ -61,6 +61,7 @@ disqus:
     shortname: https-sysop71-com
 
 google_analytics: G-8CXKYEE42R
+excerpt_separator: "<!--more-->"
 
 paginate: 5
 paginate_path: /posts/page:num

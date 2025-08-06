@@ -4,6 +4,11 @@ layout: base
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
+    {% if page.thumbnail %}
+      <div class="post-thumbnail">
+        <img src="{{ page.thumbnail | relative_url }}" alt="Post thumbnail">
+      </div>
+    {% endif %}
     <h1 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h1>
     <p class="post-meta">
       {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
@@ -29,6 +34,10 @@ layout: base
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
   </div>
+
+  {% if page.vod_url %}
+    <p><a href="{{ page.vod_url }}" target="_blank" rel="noopener">🎥 Watch the VOD on Twitch</a></p>
+  {% endif %}
 
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
