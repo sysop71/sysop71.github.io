@@ -2,7 +2,7 @@
 layout: log
 title: "Episode 1 – The Perfect Seed"
 date: 2025-08-07
-published: false
+published: true
 status: "Recorded"
 ---
 
