@@ -13,12 +13,12 @@ Below are internal tracking pages for each episode. Use these to track timestamp
 {% assign logs = site.minecraft | sort: 'date' %}
 <ul>
   {% for log in logs %}
-    {% unless log.name == 'index.md' %}
+    {% if log.layout == "log" %}
       <li>
         <a href="{{ log.url | relative_url }}">{{ log.title }}</a>
         – <strong>Status:</strong> {{ log.status | default: "Draft" }}
         {% unless log.published %} <em>(Unpublished)</em>{% endunless %}
       </li>
-    {% endunless %}
+    {% endif %}
   {% endfor %}
 </ul>
