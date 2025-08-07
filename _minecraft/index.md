@@ -1,10 +1,8 @@
 ---
-title: "Minecraft Episode Logs"
+title: "Minecraft Survival Series – Production Logs"
 layout: page
 permalink: /minecraft/
 ---
-
-# 🎬 Minecraft Survival Series – Production Logs
 
 Below are internal tracking pages for each episode. Use these to track timestamps, progress, and publishing status.
 
