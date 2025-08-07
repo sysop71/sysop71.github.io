@@ -25,6 +25,9 @@ collections:
     month:
     year:
     output: true
+  minecraft:
+    output: true
+    permalink: /minecraft/:name/
 
 minima:
   skin: dark

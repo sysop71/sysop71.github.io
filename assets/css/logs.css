@@ -1,0 +1,15 @@
+/* Episode log status tag styling */
+.log-status {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.log-status:before {
+  content: "● ";
+}
+
+.log-status[data-status="Recorded"] { color: green; }
+.log-status[data-status="Needs Edit"] { color: orange; }
+.log-status[data-status="Published"] { color: blue; }
